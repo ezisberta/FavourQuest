@@ -8,22 +8,10 @@ import {
   SafeAreaView,
   Pressable,
 } from "react-native";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
 
 import colors from "../config/colors";
 
 function RegistrationScreen(props) {
-  let [fontsLoaded] = useFonts({
-    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
-    "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
-    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
-    "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
-  });
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
-
   const backbutton = () => {
     console.log("Back Button Pressed");
   };

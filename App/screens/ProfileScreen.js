@@ -7,22 +7,12 @@ import {
   View,
   SafeAreaView,
   Pressable,
+  Image,
 } from "react-native";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
 
 import colors from "../config/colors";
 
 function ProfileScreen(props) {
-  let [fontsLoaded] = useFonts({
-    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
-    "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
-    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
-    "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
-  });
-  if (!fontsLoaded) {
-    <AppLoading />;
-  }
   const backbutton = () => {
     console.log("Back Button Pressed");
   };
@@ -38,27 +28,37 @@ function ProfileScreen(props) {
         </Pressable>
       </SafeAreaView>
       <Text style={styles.ProfileText}>Profile</Text>
-      <View style={styles.ViewForm}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="First Name"
-        ></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Surname"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Username"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Email"></TextInput>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          secureTextEntry={true}
-        ></TextInput>
+      <View style={styles.ProfileOuterCard}>
+        {/* <Image source={require("../assets/images/SkeleAva.png")} /> */}
+        <Text style={styles.ProfileCard}>Username</Text>
+        <Text style={styles.ProfileCardContent}>Ghoul666</Text>
+        <Text style={styles.ProfileCard}>Current Level</Text>
+        <Text style={styles.ProfileCardContent}>4</Text>
+        <Text style={styles.ProfileCard}>Exp needed to next level</Text>
+        <Text style={styles.ProfileCardContent}>150xp</Text>
       </View>
       <View style={styles.Edit}>
         <Text style={styles.EditText}>Edit Details</Text>
+        <Text style={styles.ChangePasswordText}>Change Password</Text>
       </View>
     </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
+  ProfileCardContent: {
+    fontSize: "20",
+    fontFamily: "Minecraft-Bold",
+    color: colors.primary,
+  },
+  ProfileOuterCard: {
+    margin: 25,
+    height: 200,
+    paddingLeft: 25,
+    backgroundColor: colors.secondary,
+  },
+  ProfileCard: {
+    fontFamily: "Minecraft-Regular",
+  },
   BackArrow: {
     color: colors.white,
     fontSize: 50,
@@ -107,15 +107,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 40,
     fontFamily: "Minecraft-Bold",
-  },
-  RegisterSubText: {
-    textAlign: "center",
-    paddingTop: 15,
-    fontFamily: "Minecraft-Regular",
-    fontSize: "15%",
-    color: colors.black,
-    textShadowColor: colors.white,
-    textShadowRadius: "10",
   },
 });
 
