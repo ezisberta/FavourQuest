@@ -11,6 +11,8 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
+import colors from "../config/colors";
+
 function RegistrationScreen(props) {
   let [fontsLoaded] = useFonts({
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -23,7 +25,7 @@ function RegistrationScreen(props) {
   }
 
   const backbutton = () => {
-    console.log("Turkey");
+    console.log("Back Button Pressed");
   };
   return (
     <ImageBackground
@@ -62,7 +64,7 @@ function RegistrationScreen(props) {
 
 const styles = StyleSheet.create({
   BackArrow: {
-    color: "white",
+    color: colors.white,
     fontSize: 50,
     textAlign: "center",
     margin: -7,
@@ -71,16 +73,16 @@ const styles = StyleSheet.create({
     margin: 25,
     width: 50,
     height: 50,
-    backgroundColor: "#fc5c65",
+    backgroundColor: colors.primary,
   },
   Submit: {
     height: 80,
-    backgroundColor: "#fc5c65",
+    backgroundColor: colors.primary,
     margin: 25,
   },
   SubmitText: {
     paddingTop: 18,
-    color: "white",
+    color: colors.white,
     fontSize: 35,
     textAlign: "center",
     fontFamily: "Minecraft-Regular",
@@ -93,30 +95,30 @@ const styles = StyleSheet.create({
   },
 
   TextInput: {
-    color: "black",
+    color: colors.black,
     textAlign: "center",
     height: 40,
     margin: 25,
     borderWidth: 2,
-    backgroundColor: "white",
-    borderColor: "#fc5c65",
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
   RegisterText: {
-    fontFamily: "Minecraft-Bold",
-    textShadowColor: "black",
+    textShadowColor: colors.black,
     textShadowRadius: "10",
     textAlign: "center",
-    color: "white",
+    color: colors.white,
     fontSize: 40,
+    fontFamily: "Minecraft-Bold",
   },
   RegisterSubText: {
     textAlign: "center",
     paddingTop: 15,
     fontFamily: "Minecraft-Regular",
     fontSize: "15%",
-    color: "black",
-    textShadowColor: "white",
+    color: colors.black,
+    textShadowColor: colors.white,
     textShadowRadius: "10",
   },
 });
