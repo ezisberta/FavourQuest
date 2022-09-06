@@ -13,7 +13,7 @@ import AppLoading from "expo-app-loading";
 
 import colors from "../config/colors";
 
-function RegistrationScreen(props) {
+function ProfileScreen(props) {
   let [fontsLoaded] = useFonts({
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
@@ -23,10 +23,10 @@ function RegistrationScreen(props) {
   if (!fontsLoaded) {
     <AppLoading />;
   }
-
   const backbutton = () => {
     console.log("Back Button Pressed");
   };
+
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
@@ -37,10 +37,7 @@ function RegistrationScreen(props) {
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
       </SafeAreaView>
-      <Text style={styles.RegisterText}>Register</Text>
-      <Text style={styles.RegisterSubText}>
-        Enter your details below to begin your quest!
-      </Text>
+      <Text style={styles.ProfileText}>Profile</Text>
       <View style={styles.ViewForm}>
         <TextInput
           style={styles.TextInput}
@@ -55,13 +52,12 @@ function RegistrationScreen(props) {
           secureTextEntry={true}
         ></TextInput>
       </View>
-      <View style={styles.Submit}>
-        <Text style={styles.SubmitText}>Submit</Text>
+      <View style={styles.Edit}>
+        <Text style={styles.EditText}>Edit Details</Text>
       </View>
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
   BackArrow: {
     color: colors.white,
@@ -75,12 +71,12 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: colors.primary,
   },
-  Submit: {
+  Edit: {
     height: 80,
     backgroundColor: colors.primary,
     margin: 25,
   },
-  SubmitText: {
+  EditText: {
     paddingTop: 18,
     color: colors.white,
     fontSize: 35,
@@ -104,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
-  RegisterText: {
+  ProfileText: {
     textShadowColor: colors.black,
     textShadowRadius: "10",
     textAlign: "center",
@@ -123,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+export default ProfileScreen;
