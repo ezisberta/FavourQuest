@@ -5,10 +5,11 @@ import {
   ImageBackground,
   StyleSheet,
   View,
-  Button,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 function RegistrationScreen(props) {
   let [fontsLoaded] = useFonts({
@@ -29,7 +30,11 @@ function RegistrationScreen(props) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <Button title="Back" style={styles.BackButton} onPress={backbutton} />
+      <SafeAreaView>
+        <Pressable onPress={backbutton} style={styles.BackButtonBorder}>
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+      </SafeAreaView>
       <Text style={styles.RegisterText}>Register</Text>
       <Text style={styles.RegisterSubText}>
         Enter your details below to begin your quest!
@@ -56,11 +61,17 @@ function RegistrationScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  BackButton: {
-    width: 120,
-    height: 120,
-    backgroundColor: "white",
-    justifyContent: "center",
+  BackArrow: {
+    color: "white",
+    fontSize: 50,
+    textAlign: "center",
+    margin: -7,
+  },
+  BackButtonBorder: {
+    margin: 25,
+    width: 50,
+    height: 50,
+    backgroundColor: "#fc5c65",
   },
   Submit: {
     height: 80,
@@ -92,7 +103,6 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Regular",
   },
   RegisterText: {
-    paddingTop: "26%",
     fontFamily: "Minecraft-Bold",
     textShadowColor: "black",
     textShadowRadius: "10",
