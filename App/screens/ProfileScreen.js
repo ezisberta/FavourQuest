@@ -1,3 +1,4 @@
+import AppLoading from "expo-app-loading";
 import React from "react";
 import {
   Text,
@@ -9,10 +10,22 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import { useFonts } from "expo-font";
 
 import colors from "../config/colors";
 
 function ProfileScreen(props) {
+  const [fontsLoaded] = useFonts({
+    "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
+    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
+    "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
+    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   const backbutton = () => {
     console.log("Back Button Pressed");
   };
@@ -27,11 +40,10 @@ function ProfileScreen(props) {
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
       </SafeAreaView>
+      {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
       <Text style={styles.ProfileText}>Profile</Text>
       <View style={styles.ProfileOuterCard}>
-        <Text style={styles.ProfileCard}>
-          Username <Image source={require("../assets/images/SkeleAva.png")} />
-        </Text>
+        <Text style={styles.ProfileCard}>Username</Text>
         <Text style={styles.ProfileCardContent}>Ghoul666</Text>
         <Text style={styles.ProfileCard}>Current Level</Text>
         <Text style={styles.ProfileCardContent}>4</Text>

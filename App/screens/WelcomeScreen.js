@@ -4,6 +4,17 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
 function WelcomeScreen(props) {
+  const [fontsLoaded] = useFonts({
+    "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
+    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
+    "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
+    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <ImageBackground
       style={styles.background}
