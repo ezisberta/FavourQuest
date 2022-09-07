@@ -1,11 +1,16 @@
 import AppLoading from "expo-app-loading";
 import React from "react";
-import { Text, ImageBackground, StyleSheet, View } from "react-native";
+import {
+  Text,
+  ImageBackground,
+  StyleSheet,
+  View,
+  Pressable,
+} from "react-native";
 import { useFonts } from "expo-font";
-
 import colors from "../config/colors";
 
-function ProfileScreen(props) {
+function ProfileScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -22,8 +27,18 @@ function ProfileScreen(props) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
-      <Text style={styles.ProfileText}>Profile</Text>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Map");
+          }}
+          style={styles.BackButtonBorder}
+        >
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+        {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
+        <Text style={styles.ProfileText}>Profile</Text>
+      </View>
       <View style={styles.ProfileOuterCard}>
         <Text style={styles.ProfileCard}>Username</Text>
         <Text style={styles.ProfileCardContent}>Ghoul666</Text>
@@ -33,7 +48,12 @@ function ProfileScreen(props) {
         <Text style={styles.ProfileCardContent}>150xp</Text>
       </View>
       <View style={styles.Edit}>
-        <Text style={styles.EditText}>Edit Details</Text>
+        <Text
+          style={styles.EditText}
+          onPress={() => navigation.navigate("Edit Details")}
+        >
+          Edit Details
+        </Text>
       </View>
     </ImageBackground>
   );
@@ -85,13 +105,29 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Regular",
   },
   ProfileText: {
-    marginTop: 50,
+    marginTop: 20,
+    marginLeft: 20,
     textShadowColor: colors.black,
-    // textShadowRadius: "10",
+    textShadowRadius: "10",
     textAlign: "center",
     color: colors.white,
     fontSize: 40,
     fontFamily: "Minecraft-Bold",
+  },
+  BackArrow: {
+    color: colors.white,
+    fontSize: 40,
+    textAlign: "center",
+    margin: -6,
+  },
+  BackButtonBorder: {
+    margin: 25,
+    width: 40,
+    height: 40,
+    backgroundColor: colors.primary,
+  },
+  header: {
+    flexDirection: "row",
   },
 });
 

@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -25,7 +25,12 @@ function WelcomeScreen(props) {
         <Text style={styles.welcomeText}>Login</Text>
       </View>
       <View style={styles.registerButton}>
-        <Text style={styles.welcomeText}>Register</Text>
+        <Text
+          onPress={() => navigation.navigate("Registration")}
+          style={styles.welcomeText}
+        >
+          Register
+        </Text>
       </View>
     </ImageBackground>
   );
@@ -36,7 +41,7 @@ const styles = StyleSheet.create({
   welcometext: {
     fontFamily: "Minecraft-Bold",
     textShadowColor: "black",
-    // textShadowRadius: "10",
+    textShadowRadius: "10",
     textAlign: "center",
     paddingBottom: 300,
     color: "white",

@@ -1,14 +1,14 @@
 import React from "react";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
 import {
   Text,
   TextInput,
   ImageBackground,
   StyleSheet,
   View,
+  SafeAreaView,
+  Pressable,
 } from "react-native";
-
+import { useFonts } from "expo-font";
 import colors from "../config/colors";
 
 function RegistrationScreen({ navigation }) {
@@ -18,21 +18,22 @@ function RegistrationScreen({ navigation }) {
     "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
-  const pressHandler = () => {
-    navigation.navigate("Profile");
-  };
-
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <Text style={styles.RegisterText}>Register</Text>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Welcome");
+          }}
+          style={styles.BackButtonBorder}
+        >
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+        <Text style={styles.RegisterText}>Register</Text>
+      </View>
       <Text style={styles.RegisterSubText}>
         Enter your details below to begin your quest!
       </Text>
@@ -50,8 +51,12 @@ function RegistrationScreen({ navigation }) {
           secureTextEntry={true}
         ></TextInput>
       </View>
+
       <View style={styles.Submit}>
-        <Text style={styles.SubmitText} onPress={pressHandler}>
+        <Text
+          style={styles.SubmitText}
+          onPress={() => navigation.navigate("Profile")}
+        >
           Submit
         </Text>
       </View>
@@ -90,9 +95,9 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Regular",
   },
   RegisterText: {
-    marginTop: 50,
+    marginTop: 20,
     textShadowColor: colors.black,
-    // textShadowRadius: "10",
+    textShadowRadius: "10",
     textAlign: "center",
     color: colors.white,
     fontSize: 40,
@@ -105,7 +110,22 @@ const styles = StyleSheet.create({
     fontSize: "15%",
     color: colors.black,
     textShadowColor: colors.white,
-    // textShadowRadius: "10",
+    textShadowRadius: "10",
+  },
+  BackArrow: {
+    color: colors.white,
+    fontSize: 40,
+    textAlign: "center",
+    margin: -6,
+  },
+  BackButtonBorder: {
+    margin: 25,
+    width: 40,
+    height: 40,
+    backgroundColor: colors.primary,
+  },
+  header: {
+    flexDirection: "row",
   },
 });
 

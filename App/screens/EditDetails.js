@@ -6,11 +6,12 @@ import {
   ImageBackground,
   StyleSheet,
   View,
+  Pressable,
 } from "react-native";
 import { useFonts } from "expo-font";
 
 import colors from "../config/colors";
-function EditDetails(props) {
+function EditDetails({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -26,7 +27,17 @@ function EditDetails(props) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <Text style={styles.DetailsText}>Edit Details</Text>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+          style={styles.BackButtonBorder}
+        >
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+        <Text style={styles.DetailsText}>Edit Details</Text>
+      </View>
       <View style={styles.ProfileOuterCard}>
         <Text style={styles.ProfileCard}>Change Username</Text>
         <TextInput style={styles.TextInput} placeholder="username"></TextInput>
@@ -42,7 +53,12 @@ function EditDetails(props) {
         <Text style={styles.EditText}>Edit Details</Text>
       </View>
       <View style={styles.Submit}>
-        <Text style={styles.SubmitText}>Submit</Text>
+        <Text
+          style={styles.SubmitText}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          Submit
+        </Text>
       </View>
     </ImageBackground>
   );
@@ -85,9 +101,9 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Regular",
   },
   DetailsText: {
-    marginTop: 50,
+    marginTop: 20,
     textShadowColor: colors.black,
-    // textShadowRadius: "10",
+    textShadowRadius: "10",
     textAlign: "center",
     color: colors.white,
     fontSize: 40,
@@ -104,6 +120,21 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: "center",
     fontFamily: "Minecraft-Regular",
+  },
+  BackArrow: {
+    color: colors.white,
+    fontSize: 40,
+    textAlign: "center",
+    margin: -6,
+  },
+  BackButtonBorder: {
+    margin: 25,
+    width: 40,
+    height: 40,
+    backgroundColor: colors.primary,
+  },
+  header: {
+    flexDirection: "row",
   },
 });
 
