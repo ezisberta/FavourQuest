@@ -29,8 +29,9 @@ function ProfileScreen(props) {
       </SafeAreaView>
       <Text style={styles.ProfileText}>Profile</Text>
       <View style={styles.ProfileOuterCard}>
-        {/* <Image source={require("../assets/images/SkeleAva.png")} /> */}
-        <Text style={styles.ProfileCard}>Username</Text>
+        <Text style={styles.ProfileCard}>
+          Username <Image source={require("../assets/images/SkeleAva.png")} />
+        </Text>
         <Text style={styles.ProfileCardContent}>Ghoul666</Text>
         <Text style={styles.ProfileCard}>Current Level</Text>
         <Text style={styles.ProfileCardContent}>4</Text>
