@@ -1,17 +1,17 @@
 import React from "react";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 import {
   Text,
   TextInput,
   ImageBackground,
   StyleSheet,
   View,
-  SafeAreaView,
-  Pressable,
 } from "react-native";
 
 import colors from "../config/colors";
 
-function RegistrationScreen(props) {
+function RegistrationScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -22,19 +22,16 @@ function RegistrationScreen(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  const backbutton = () => {
-    console.log("Back Button Pressed");
+
+  const pressHandler = () => {
+    navigation.navigate("Profile");
   };
+
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <SafeAreaView>
-        <Pressable onPress={backbutton} style={styles.BackButtonBorder}>
-          <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
-      </SafeAreaView>
       <Text style={styles.RegisterText}>Register</Text>
       <Text style={styles.RegisterSubText}>
         Enter your details below to begin your quest!
@@ -54,32 +51,22 @@ function RegistrationScreen(props) {
         ></TextInput>
       </View>
       <View style={styles.Submit}>
-        <Text style={styles.SubmitText}>Submit</Text>
+        <Text style={styles.SubmitText} onPress={pressHandler}>
+          Submit
+        </Text>
       </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  BackArrow: {
-    color: colors.white,
-    fontSize: 50,
-    textAlign: "center",
-    margin: -7,
-  },
-  BackButtonBorder: {
-    margin: 25,
-    width: 50,
-    height: 50,
-    backgroundColor: colors.primary,
-  },
   Submit: {
-    height: 80,
+    height: 60,
     backgroundColor: colors.primary,
     margin: 25,
   },
   SubmitText: {
-    paddingTop: 18,
+    paddingTop: 10,
     color: colors.white,
     fontSize: 35,
     textAlign: "center",
@@ -89,20 +76,21 @@ const styles = StyleSheet.create({
   background: { flex: 1 },
 
   ViewForm: {
-    paddingTop: "10%",
+    paddingTop: "5%",
   },
 
   TextInput: {
     color: colors.black,
     textAlign: "center",
     height: 40,
-    margin: 25,
+    margin: 20,
     borderWidth: 2,
     backgroundColor: colors.white,
     borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
   RegisterText: {
+    marginTop: 50,
     textShadowColor: colors.black,
     textShadowRadius: "10",
     textAlign: "center",

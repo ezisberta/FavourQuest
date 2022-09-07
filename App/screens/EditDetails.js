@@ -1,11 +1,16 @@
 import AppLoading from "expo-app-loading";
 import React from "react";
-import { Text, ImageBackground, StyleSheet, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  ImageBackground,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useFonts } from "expo-font";
 
 import colors from "../config/colors";
-
-function ProfileScreen(props) {
+function EditDetails(props) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -16,24 +21,28 @@ function ProfileScreen(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
-      <Text style={styles.ProfileText}>Profile</Text>
+      <Text style={styles.DetailsText}>Edit Details</Text>
       <View style={styles.ProfileOuterCard}>
-        <Text style={styles.ProfileCard}>Username</Text>
-        <Text style={styles.ProfileCardContent}>Ghoul666</Text>
-        <Text style={styles.ProfileCard}>Current Level</Text>
-        <Text style={styles.ProfileCardContent}>4</Text>
-        <Text style={styles.ProfileCard}>Exp needed to next level</Text>
-        <Text style={styles.ProfileCardContent}>150xp</Text>
+        <Text style={styles.ProfileCard}>Change Username</Text>
+        <TextInput style={styles.TextInput} placeholder="username"></TextInput>
+        <Text style={styles.ProfileCard}>Change Password</Text>
+        <TextInput style={styles.TextInput} placeholder="password"></TextInput>
+        <Text style={styles.ProfileCard}>Change Avatar</Text>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="avatar URL"
+        ></TextInput>
       </View>
       <View style={styles.Edit}>
         <Text style={styles.EditText}>Edit Details</Text>
+      </View>
+      <View style={styles.Submit}>
+        <Text style={styles.SubmitText}>Submit</Text>
       </View>
     </ImageBackground>
   );
@@ -46,33 +55,24 @@ const styles = StyleSheet.create({
   },
   ProfileOuterCard: {
     margin: 25,
-    height: 170,
-    paddingLeft: 25,
+    height: "60%",
     backgroundColor: colors.secondary,
   },
   ProfileCard: {
-    marginTop: 10,
+    marginTop: 20,
+    marginLeft: 30,
     fontFamily: "Minecraft-Regular",
   },
-
-  Edit: {
-    height: 80,
-    backgroundColor: colors.primary,
-    margin: 25,
-  },
-  EditText: {
-    paddingTop: 18,
-    color: colors.white,
-    fontSize: 35,
-    textAlign: "center",
+  TextInput: {
+    color: colors.black,
+    height: 40,
+    borderWidth: 2,
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
 
   background: { flex: 1 },
-
-  ViewForm: {
-    paddingTop: "10%",
-  },
 
   TextInput: {
     color: colors.black,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
-  ProfileText: {
+  DetailsText: {
     marginTop: 50,
     textShadowColor: colors.black,
     textShadowRadius: "10",
@@ -93,6 +93,18 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: "Minecraft-Bold",
   },
+  Submit: {
+    height: 60,
+    backgroundColor: colors.primary,
+    margin: 25,
+  },
+  SubmitText: {
+    paddingTop: 10,
+    color: colors.white,
+    fontSize: 35,
+    textAlign: "center",
+    fontFamily: "Minecraft-Regular",
+  },
 });
 
-export default ProfileScreen;
+export default EditDetails;
