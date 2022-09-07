@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   ProfileText: {
     marginTop: 50,
     textShadowColor: colors.black,
-    textShadowRadius: "10",
+    // textShadowRadius: "10",
     textAlign: "center",
     color: colors.white,
     fontSize: 40,

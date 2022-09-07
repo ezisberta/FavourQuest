@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   welcometext: {
     fontFamily: "Minecraft-Bold",
     textShadowColor: "black",
-    textShadowRadius: "10",
+    // textShadowRadius: "10",
     textAlign: "center",
     paddingBottom: 300,
     color: "white",

@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   RegisterText: {
     marginTop: 50,
     textShadowColor: colors.black,
-    textShadowRadius: "10",
+    // textShadowRadius: "10",
     textAlign: "center",
     color: colors.white,
     fontSize: 40,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: "15%",
     color: colors.black,
     textShadowColor: colors.white,
-    textShadowRadius: "10",
+    // textShadowRadius: "10",
   },
 });
 
