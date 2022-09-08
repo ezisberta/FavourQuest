@@ -1,4 +1,3 @@
-import AppLoading from "expo-app-loading";
 import React from "react";
 import {
   Text,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
+import LoadingPage from "./LoadingPage";
 
 function ProfileScreen({ navigation }) {
   const [fontsLoaded] = useFonts({
@@ -19,7 +19,7 @@ function ProfileScreen({ navigation }) {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <LoadingPage />;
   }
 
   return (

@@ -1,4 +1,3 @@
-import AppLoading from "expo-app-loading";
 import React from "react";
 import {
   Text,
@@ -11,6 +10,7 @@ import {
 import { useFonts } from "expo-font";
 
 import colors from "../config/colors";
+import LoadingPage from "./LoadingPage";
 function EditDetails({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
@@ -20,7 +20,7 @@ function EditDetails({ navigation }) {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <LoadingPage />;
   }
   return (
     <ImageBackground
@@ -55,7 +55,7 @@ function EditDetails({ navigation }) {
       <View style={styles.Submit}>
         <Text
           style={styles.SubmitText}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("Quest")}
         >
           Submit
         </Text>
