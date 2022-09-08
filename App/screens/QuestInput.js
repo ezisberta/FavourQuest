@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -7,6 +7,8 @@ import {
   Image,
   SafeAreaView,
   Pressable,
+  TextInput,
+  View,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
@@ -15,13 +17,16 @@ import colors from "../config/colors";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Quest({ navigation }) {
+export default function QuestInput({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
     "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [time, setTime] = useState(12);
 
   if (!fontsLoaded) {
     return <LoadingPage />;
@@ -37,27 +42,55 @@ export default function Quest({ navigation }) {
           style={styles.scroll}
           source={require("../assets/images/scroll.jpg")}
         ></Image>
+        <View style={styles.header}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Map");
+            }}
+            style={styles.BackButtonBorder}
+          >
+            <Text style={styles.BackArrow}>⇤</Text>
+          </Pressable>
+        </View>
         <Text style={styles.QuestHeader}>Quest:</Text>
-        <Text style={styles.QuestText}>Please help me mow my lawn!</Text>
-        <Text style={styles.QuestLocation}>Location:</Text>
-        <Text style={styles.QuestDescription}>1 hour required</Text>
-        <Text style={styles.QuestTime}>Time: 18:00</Text>
-        <Text style={styles.QuestLink}></Text>
+        <TextInput
+          maxLength={50}
+          placeholder="Title"
+          style={styles.QuestText}
+          onChange={(text) => {
+            setTitle(text);
+          }}
+        />
+        <TextInput
+          maxLength={50}
+          placeholder="Location"
+          style={styles.QuestLocation}
+          //???????????
+        />
+        <TextInput
+          maxLength={250}
+          placeholder="Description"
+          style={styles.QuestDescription}
+          onChange={(text) => {
+            setDescription(text);
+          }}
+        />
+        <TextInput maxLength={50} placeholder="Time" style={styles.QuestTime} />
+        <TextInput
+          maxLength={150}
+          placeholder="Link"
+          style={styles.QuestLink}
+          onChange={(text) => {
+            setTime(text);
+          }}
+        />
         <Pressable
           onPress={() => {
             navigation.navigate("Map");
           }}
-          style={styles.AcceptButtonBorder}
+          style={styles.Submit}
         >
-          <Text style={styles.Accept}>Accept</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.DeclineButtonBorder}
-        >
-          <Text style={styles.Decline}>Decline</Text>
+          <Text style={styles.SubmitText}>Submit</Text>
         </Pressable>
       </SafeAreaView>
     </ImageBackground>
@@ -95,7 +128,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-
   scroll: {
     height: 500,
     width: null,
@@ -149,48 +181,35 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  DeclineButtonBorder: {
-    backgroundColor: "red",
-    margin: 25,
-    width: 80,
+  Submit: {
+    marginLeft: 130,
+    width: 70,
     height: 40,
-    right: 70,
-    bottom: 100,
-    position: "absolute",
-    borderRadius: "5%",
-    shadowOpacity: "5%",
+    backgroundColor: colors.primary,
   },
-  Decline: {
-    position: "absolute",
-    color: "black",
-    right: 10,
-    bottom: 10,
-    fontFamily: "Minecraft-Regular",
+  SubmitText: {
+    color: colors.black,
+    fontFamily: "Minecraft-Bold",
     textAlign: "center",
-    textShadowColor: colors.black,
-    textShadowRadius: "1",
-    fontSize: 18,
+    marginTop: 10,
   },
-  Accept: {
-    color: "black",
-    position: "absolute",
-    left: 10,
-    bottom: 10,
-    fontFamily: "Minecraft-Regular",
+
+  BackArrow: {
+    color: colors.white,
+    fontSize: 40,
     textAlign: "center",
-    textShadowColor: colors.black,
-    textShadowRadius: "1",
-    fontSize: 18,
+    margin: -6,
   },
-  AcceptButtonBorder: {
-    backgroundColor: "green",
+  BackButtonBorder: {
     margin: 25,
-    width: 80,
+    width: 40,
     height: 40,
-    left: 30,
-    bottom: 100,
+    backgroundColor: colors.primary,
+  },
+  header: {
+    flexDirection: "row",
     position: "absolute",
-    borderRadius: "5%",
-    shadowOpacity: "5%",
+    marginTop: 80,
+    marginLeft: 20,
   },
 });
