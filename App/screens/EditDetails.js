@@ -1,3 +1,4 @@
+import AppLoading from "expo-app-loading";
 import React from "react";
 import {
   Text,
@@ -5,19 +6,22 @@ import {
   ImageBackground,
   StyleSheet,
   View,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { useFonts } from "expo-font";
-import colors from "../config/colors";
 
-function RegistrationScreen({ navigation }) {
+import colors from "../config/colors";
+function EditDetails({ navigation }) {
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
     "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
@@ -26,32 +30,28 @@ function RegistrationScreen({ navigation }) {
       <View style={styles.header}>
         <Pressable
           onPress={() => {
-            navigation.navigate("Welcome");
+            navigation.navigate("Profile");
           }}
           style={styles.BackButtonBorder}
         >
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
-        <Text style={styles.RegisterText}>Register</Text>
+        <Text style={styles.DetailsText}>Edit Details</Text>
       </View>
-      <Text style={styles.RegisterSubText}>
-        Enter your details below to begin your quest!
-      </Text>
-      <View style={styles.ViewForm}>
+      <View style={styles.ProfileOuterCard}>
+        <Text style={styles.ProfileCard}>Change Username</Text>
+        <TextInput style={styles.TextInput} placeholder="username"></TextInput>
+        <Text style={styles.ProfileCard}>Change Password</Text>
+        <TextInput style={styles.TextInput} placeholder="password"></TextInput>
+        <Text style={styles.ProfileCard}>Change Avatar</Text>
         <TextInput
           style={styles.TextInput}
-          placeholder="First Name"
-        ></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Surname"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Username"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Email"></TextInput>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          secureTextEntry={true}
+          placeholder="avatar URL"
         ></TextInput>
       </View>
-
+      <View style={styles.Edit}>
+        <Text style={styles.EditText}>Edit Details</Text>
+      </View>
       <View style={styles.Submit}>
         <Text
           style={styles.SubmitText}
@@ -63,8 +63,52 @@ function RegistrationScreen({ navigation }) {
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
+  ProfileCardContent: {
+    fontSize: "20",
+    fontFamily: "Minecraft-Bold",
+    color: colors.primary,
+  },
+  ProfileOuterCard: {
+    margin: 25,
+    height: "60%",
+    backgroundColor: colors.secondary,
+  },
+  ProfileCard: {
+    marginTop: 20,
+    marginLeft: 30,
+    fontFamily: "Minecraft-Regular",
+  },
+  TextInput: {
+    color: colors.black,
+    height: 40,
+    borderWidth: 2,
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    fontFamily: "Minecraft-Regular",
+  },
+
+  background: { flex: 1 },
+
+  TextInput: {
+    color: colors.black,
+    textAlign: "center",
+    height: 40,
+    margin: 25,
+    borderWidth: 2,
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    fontFamily: "Minecraft-Regular",
+  },
+  DetailsText: {
+    marginTop: 20,
+    textShadowColor: colors.black,
+    textShadowRadius: "10",
+    textAlign: "center",
+    color: colors.white,
+    fontSize: 40,
+    fontFamily: "Minecraft-Bold",
+  },
   Submit: {
     height: 60,
     backgroundColor: colors.primary,
@@ -76,41 +120,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: "center",
     fontFamily: "Minecraft-Regular",
-  },
-
-  background: { flex: 1 },
-
-  ViewForm: {
-    paddingTop: "5%",
-  },
-
-  TextInput: {
-    color: colors.black,
-    textAlign: "center",
-    height: 40,
-    margin: 20,
-    borderWidth: 2,
-    backgroundColor: colors.white,
-    borderColor: colors.primary,
-    fontFamily: "Minecraft-Regular",
-  },
-  RegisterText: {
-    marginTop: 20,
-    textShadowColor: colors.black,
-    textShadowRadius: "10",
-    textAlign: "center",
-    color: colors.white,
-    fontSize: 40,
-    fontFamily: "Minecraft-Bold",
-  },
-  RegisterSubText: {
-    textAlign: "center",
-    paddingTop: 15,
-    fontFamily: "Minecraft-Regular",
-    fontSize: "15%",
-    color: colors.black,
-    textShadowColor: colors.white,
-    textShadowRadius: "10",
   },
   BackArrow: {
     color: colors.white,
@@ -129,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+export default EditDetails;

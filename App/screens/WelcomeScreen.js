@@ -3,17 +3,18 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
-function WelcomeScreen(props) {
-  let [fontsLoaded] = useFonts({
-    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
+function WelcomeScreen({ navigation }) {
+  const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
-    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
+    "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
     "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
+    "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
 
   if (!fontsLoaded) {
-    <AppLoading />;
+    return <AppLoading />;
   }
+
   return (
     <ImageBackground
       style={styles.background}
@@ -24,7 +25,12 @@ function WelcomeScreen(props) {
         <Text style={styles.welcomeText}>Login</Text>
       </View>
       <View style={styles.registerButton}>
-        <Text style={styles.welcomeText}>Register</Text>
+        <Text
+          onPress={() => navigation.navigate("Registration")}
+          style={styles.welcomeText}
+        >
+          Register
+        </Text>
       </View>
     </ImageBackground>
   );
