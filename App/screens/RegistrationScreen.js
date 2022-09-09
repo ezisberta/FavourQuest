@@ -1,23 +1,53 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Text,
   TextInput,
   ImageBackground,
   StyleSheet,
   View,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
+import LoadingPage from "./LoadingPage";
+import { auth, db } from "../../firebase";
 
 function RegistrationScreen({ navigation }) {
+  const [firstname, setFirstname] = useState("");
+  const [surname, setSurname] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
     "Minecraft-Italic": require("../assets/fonts/minecraft-font/Minecraft-Italic.otf"),
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
+
+  if (!fontsLoaded) {
+    return <LoadingPage />;
+  }
+
+  const handleSubmit = () => {
+    navigation.navigate("Profile");
+    auth.createUserWithEmailAndPassword(email, password).then((result) => {
+      console.log("result");
+    });
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const uid = user.uid;
+        db.collection("users").doc(uid).set({
+          username,
+          email,
+          firstname,
+          surname,
+        });
+      }
+    });
+  };
+
   return (
     <ImageBackground
       source={require("../assets/images/Pixel1.png")}
@@ -41,22 +71,43 @@ function RegistrationScreen({ navigation }) {
         <TextInput
           style={styles.TextInput}
           placeholder="First Name"
+          onChangeText={(typedText) => {
+            setFirstname(typedText);
+          }}
         ></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Surname"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Username"></TextInput>
-        <TextInput style={styles.TextInput} placeholder="Email"></TextInput>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Surname"
+          onChangeText={(typedText) => {
+            setSurname(typedText);
+          }}
+        ></TextInput>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Username"
+          onChangeText={(typedText) => {
+            setUsername(typedText);
+          }}
+        ></TextInput>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Email"
+          onChangeText={(typedText) => {
+            setEmail(typedText);
+          }}
+        ></TextInput>
         <TextInput
           style={styles.TextInput}
           placeholder="Password"
           secureTextEntry={true}
+          onChangeText={(typedText) => {
+            setPassword(typedText);
+          }}
         ></TextInput>
       </View>
 
       <View style={styles.Submit}>
-        <Text
-          style={styles.SubmitText}
-          onPress={() => navigation.navigate("Profile")}
-        >
+        <Text style={styles.SubmitText} onPress={handleSubmit}>
           Submit
         </Text>
       </View>

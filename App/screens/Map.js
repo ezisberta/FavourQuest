@@ -11,6 +11,7 @@ import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 
+
 export default function Map({ navigation }) {
   const [pinPoint, setPinPoint] = useState({
     latitude: 33.8087146,
