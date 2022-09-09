@@ -261,3 +261,8 @@ const styles = StyleSheet.create({
 });
 
 export default RegistrationScreen;
+
+// refactor states to strings and change if statements (render, invalid, valid)
+// sort username if already exists
+// styling the alerts
+// submit button functionality
