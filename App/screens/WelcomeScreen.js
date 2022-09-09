@@ -22,7 +22,12 @@ function WelcomeScreen({ navigation }) {
     >
       <Text style={styles.welcometext}>FavourQuest</Text>
       <View style={styles.loginButton}>
-        <Text style={styles.welcomeText}>Login</Text>
+        <Text
+          style={styles.welcomeText}
+          onPress={() => navigation.navigate("Login")}
+        >
+          Login
+        </Text>
       </View>
       <View style={styles.registerButton}>
         <Text
