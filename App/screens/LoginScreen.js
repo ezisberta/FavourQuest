@@ -31,7 +31,7 @@ function LoginScreen({ navigation }) {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => navigation.navigate("Profile"))
-      .catch(function (error) {
+      .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === "auth/wrong-password") {
