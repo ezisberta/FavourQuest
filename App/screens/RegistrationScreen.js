@@ -19,6 +19,54 @@ function RegistrationScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [firstNameValid, setFirstNameValid] = useState(true);
+  const [surnameValid, setSurnameValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const [emailValid, setEmailValid] = useState("valid");
+
+  // SUBMIT, Valid states need to be all true and values can't be empty strings
+
+  const handleBlurFirstName = () => {
+    if (!/[a-z-']+/i.test(firstname)) {
+      setFirstNameValid(false);
+    } else {
+      setFirstNameValid(true);
+    }
+  };
+
+  const handleBlurSurname = () => {
+    if (!/[a-z-']+/i.test(surname)) {
+      setSurnameValid(false);
+    } else {
+      setSurnameValid(true);
+    }
+  };
+
+  const handleBlurPassword = () => {
+    if (password.length < 6) {
+      setPasswordValid(false);
+    } else {
+      setPasswordValid(true);
+    }
+  };
+
+  const handleBlurEmail = () => {
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailValid("invalidFormat");
+    } else {
+      {
+        auth.fetchSignInMethodsForEmail(email).then((result) => {
+          console.log(result);
+          if (result.length > 0) {
+            setEmailValid("takenEmail");
+          } else {
+            setEmailValid("valid");
+          }
+        });
+      }
+    }
+  };
+
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -74,20 +122,32 @@ function RegistrationScreen({ navigation }) {
           onChangeText={(typedText) => {
             setFirstname(typedText);
           }}
+          onBlur={handleBlurFirstName}
+          maxLength={20}
         ></TextInput>
+        {!firstNameValid && (
+          <Text style={styles.invalidWarning}>Invalid firstname</Text>
+        )}
+
         <TextInput
           style={styles.TextInput}
           placeholder="Surname"
           onChangeText={(typedText) => {
             setSurname(typedText);
           }}
+          onBlur={handleBlurSurname}
+          maxLength={20}
         ></TextInput>
+        {!surnameValid && (
+          <Text style={styles.invalidWarning}>Invalid surname</Text>
+        )}
         <TextInput
           style={styles.TextInput}
           placeholder="Username"
           onChangeText={(typedText) => {
             setUsername(typedText);
           }}
+          maxLength={15}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
@@ -95,7 +155,17 @@ function RegistrationScreen({ navigation }) {
           onChangeText={(typedText) => {
             setEmail(typedText);
           }}
+          onBlur={handleBlurEmail}
+          maxLength={50}
         ></TextInput>
+        {emailValid === "invalidFormat" ? (
+          <Text style={styles.invalidWarning}>Invalid email format.</Text>
+        ) : emailValid === "takenEmail" ? (
+          <Text style={styles.invalidWarning}>Email taken</Text>
+        ) : (
+          <></>
+        )}
+
         <TextInput
           style={styles.TextInput}
           placeholder="Password"
@@ -103,7 +173,14 @@ function RegistrationScreen({ navigation }) {
           onChangeText={(typedText) => {
             setPassword(typedText);
           }}
+          onBlur={handleBlurPassword}
+          maxLength={20}
         ></TextInput>
+        {!passwordValid && (
+          <Text style={styles.invalidWarning}>
+            Invalid password. Password must have between 6 and 20 characters.
+          </Text>
+        )}
       </View>
 
       <View style={styles.Submit}>
@@ -177,6 +254,9 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
+  },
+  invalidWarning: {
+    color: "red",
   },
 });
 
