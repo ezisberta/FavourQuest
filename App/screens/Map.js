@@ -11,7 +11,6 @@ import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 
-
 export default function Map({ navigation }) {
   const [pinPoint, setPinPoint] = useState({
     latitude: 33.8087146,
@@ -64,8 +63,33 @@ export default function Map({ navigation }) {
         >
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
-        <Text style={styles.MapText}>Map</Text>
-        <View style={styles.Menu}></View>
+        <Text style={styles.MapText}></Text>
+        <View style={styles.Menu}>
+          <Text
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+            style={styles.NavButton}
+          >
+            Profile
+          </Text>
+          <Text
+            onPress={() => {
+              navigation.navigate("Quest Log");
+            }}
+            style={styles.NavButton}
+          >
+            Quest Log
+          </Text>
+          <Text
+            onPress={() => {
+              navigation.navigate("Create Quest");
+            }}
+            style={styles.NavButton}
+          >
+            Create Quest
+          </Text>
+        </View>
       </Mapview>
     </View>
   );
@@ -76,7 +100,9 @@ const styles = StyleSheet.create({
     width: 50,
   },
   Menu: {
-    marginTop: 460,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 500,
     width: "100%",
     height: 70,
     backgroundColor: colors.primary,
@@ -108,5 +134,11 @@ const styles = StyleSheet.create({
   },
   View: {
     flex: 1,
+  },
+  NavButton: {
+    fontSize: 15,
+    height: 50,
+    margin: 10,
+    fontFamily: "Minecraft-Regular",
   },
 });

@@ -13,6 +13,7 @@ import {
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
+import { db } from "../../firebase";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,6 +32,15 @@ export default function QuestInput({ navigation }) {
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
+
+  const handleSubmit = (quests) => {
+    const uid = quests.uid;
+    db.collection("Quests").doc(uid).set({
+      title,
+      description,
+    });
+    console.log(title);
+  };
 
   return (
     <ImageBackground
@@ -84,12 +94,7 @@ export default function QuestInput({ navigation }) {
             setTime(text);
           }}
         />
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.Submit}
-        >
+        <Pressable onPress={handleSubmit} style={styles.Submit}>
           <Text style={styles.SubmitText}>Submit</Text>
         </Pressable>
       </SafeAreaView>
@@ -182,7 +187,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   Submit: {
-    marginLeft: 130,
+    marginLeft: 140,
+    marginTop: 370,
+    position: "absolute",
     width: 70,
     height: 40,
     backgroundColor: colors.primary,
