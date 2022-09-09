@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   ImageBackground,
@@ -9,8 +9,28 @@ import {
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
+import { auth, db } from "../../firebase";
 
 function ProfileScreen({ navigation }) {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const uid = user.uid;
+        console.log(uid);
+        db.collection("users")
+          .doc(uid)
+          .get()
+          .then((snapshot) => {
+            //  console.log(snapshot.data());
+            const data = snapshot.data();
+            setUsername(data.username);
+          });
+      }
+    });
+  }, []);
+
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -21,6 +41,12 @@ function ProfileScreen({ navigation }) {
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
+
+  const handleSignOut = () => {
+    auth.signOut().then(() => {
+      navigation.navigate("Welcome");
+    });
+  };
 
   return (
     <ImageBackground
@@ -41,7 +67,7 @@ function ProfileScreen({ navigation }) {
       </View>
       <View style={styles.ProfileOuterCard}>
         <Text style={styles.ProfileCard}>Username</Text>
-        <Text style={styles.ProfileCardContent}>Ghoul666</Text>
+        <Text style={styles.ProfileCardContent}>{`${username}`}</Text>
         <Text style={styles.ProfileCard}>Current Level</Text>
         <Text style={styles.ProfileCardContent}>4</Text>
         <Text style={styles.ProfileCard}>Exp needed to next level</Text>
@@ -53,6 +79,9 @@ function ProfileScreen({ navigation }) {
           onPress={() => navigation.navigate("Edit Details")}
         >
           Edit Details
+        </Text>
+        <Text style={styles.EditText} onPress={handleSignOut}>
+          Sign Out
         </Text>
       </View>
     </ImageBackground>

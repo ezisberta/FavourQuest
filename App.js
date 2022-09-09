@@ -12,9 +12,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Quest" component={Quest} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Quest" component={Quest} />
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Edit Details" component={EditDetails} />

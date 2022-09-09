@@ -14,7 +14,6 @@ export default function Map({ navigation }) {
         <Text style={styles.BackArrow}>⇤</Text>
       </Pressable>
       <Text style={styles.MapText}>Map</Text>
-      <Quest />
     </View>
   );
 }
