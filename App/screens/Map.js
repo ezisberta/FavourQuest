@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
+import Quest from "./Quest";
 
 export default function Map({ navigation }) {
   return (
@@ -13,6 +14,7 @@ export default function Map({ navigation }) {
         <Text style={styles.BackArrow}>⇤</Text>
       </Pressable>
       <Text style={styles.MapText}>Map</Text>
+      <Quest />
     </View>
   );
 }
