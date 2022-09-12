@@ -14,6 +14,8 @@ import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { auth, db } from "../../firebase";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Input } from "react-native-elements";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -80,12 +82,25 @@ export default function QuestInput({ navigation }) {
             setTitle(text);
           }}
         />
-        <TextInput
-          maxLength={50}
-          placeholder="Location"
-          style={styles.QuestLocation}
-          //???????????
+
+        <GooglePlacesAutocomplete
+          placeholder="Where will it be?"
+          fetchDetails={true}
+          types={["(regions)"]}
+          onPress={(data, details = null) => console.log("details")}
+          textInputProps={{
+            errorStyle: { color: "red" },
+          }}
+          GooglePlacesSearchQuery={{ rankby: "distance" }}
+          query={{
+            key: "AIzaSyDuLAkmUitX00eKmYkDwD3zsc7MuOrmFuc",
+            language: "en",
+            components: "country:uk",
+            radius: 3000,
+          }}
+          styles={{ container: { ...styles.searchContainer } }}
         />
+
         <TextInput
           maxLength={250}
           placeholder="Description"
@@ -110,14 +125,6 @@ export default function QuestInput({ navigation }) {
             setMinute(text);
           }}
         />
-        <TextInput
-          maxLength={150}
-          placeholder="Link"
-          style={styles.QuestLink}
-          onChangeText={(text) => {
-            setTime(text);
-          }}
-        />
         <Pressable onPress={handleSubmit} style={styles.Submit}>
           <Text style={styles.SubmitText}>Submit</Text>
         </Pressable>
@@ -127,6 +134,13 @@ export default function QuestInput({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  searchContainer: {
+    position: "absolute",
+    width: "70%",
+    zIndex: 1,
+    left: 45,
+    top: 300,
+  },
   background: {
     flex: 1,
     justifyContent: "center",
@@ -177,7 +191,7 @@ const styles = StyleSheet.create({
   QuestDescription: {
     position: "absolute",
     left: 60,
-    top: 220,
+    top: 190,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -189,7 +203,7 @@ const styles = StyleSheet.create({
   QuestHour: {
     position: "absolute",
     left: 60,
-    top: 280,
+    top: 250,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -201,7 +215,7 @@ const styles = StyleSheet.create({
   QuestMinute: {
     position: "absolute",
     left: 120,
-    top: 280,
+    top: 250,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -210,18 +224,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  QuestLink: {
-    position: "absolute",
-    left: 60,
-    top: 310,
-    fontFamily: "Minecraft-Regular",
-    textShadowColor: "black",
-    textShadowRadius: "10",
-    textAlign: "center",
-    paddingBottom: 300,
-    color: "black",
-    fontSize: 20,
-  },
+
   Submit: {
     marginLeft: 140,
     marginTop: 370,
