@@ -1,22 +1,15 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Image,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
 import { useState, useEffect } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
+import { db } from "../../firebase";
 
 export default function Map({ navigation }) {
   const [pinPoint, setPinPoint] = useState({
-    latitude: 33.8087146,
+    latitude: 54.1361346,
     longitude: -1.6229181,
   });
-
   const [region, setRegion] = useState({
     latitude: pinPoint.latitude,
     longitude: pinPoint.longitude,
@@ -24,12 +17,18 @@ export default function Map({ navigation }) {
     longitudeDelta: 0.0421,
   });
 
+  const [markers, setMarkers] = useState([]);
+
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setErrorMsg("Permission to access location was denied");
+          return;
+        }
+      } catch (error) {
+        console.log(error);
       }
 
       let location = await Location.getCurrentPositionAsync({});
@@ -44,17 +43,35 @@ export default function Map({ navigation }) {
         longitudeDelta: 0.0421,
       });
     })();
+    db.collection("Quests")
+      .get()
+      .then((querySnapshot) => {
+        setMarkers(
+          querySnapshot.docs.map((doc) => {
+            return (
+              <Marker
+                pinColor="blue"
+                coordinate={{
+                  latitude: doc.data().location.lat,
+                  longitude: doc.data().location.lng,
+                }}
+              ></Marker>
+            );
+          })
+        );
+      });
   }, []);
 
   return (
     <View style={styles.View}>
       <Mapview region={region} style={styles.Map} provider={PROVIDER_GOOGLE}>
         <Marker
+          pinColor={colors.white}
           coordinate={pinPoint}
           draggable={true}
-          icon={require("../assets/images/SkeleAva.png")}
           style={styles.Marker}
         ></Marker>
+        {markers}
         <Pressable
           onPress={() => {
             navigation.navigate("Profile");
@@ -111,7 +128,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  Marker: { Width: 10 },
+  Marker: {},
   MapText: {
     textShadowColor: colors.black,
     textShadowRadius: "10",

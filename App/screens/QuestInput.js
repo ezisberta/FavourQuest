@@ -15,7 +15,6 @@ import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { auth, db } from "../../firebase";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { Input } from "react-native-elements";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,6 +30,8 @@ export default function QuestInput({ navigation }) {
   const [description, setDescription] = useState("");
   const [hour, setHour] = useState(12);
   const [minute, setMinute] = useState(12);
+  const [location, setLocation] = useState({});
+  // const [markers, setMarkers] = useState([]);
 
   if (!fontsLoaded) {
     return <LoadingPage />;
@@ -45,12 +46,33 @@ export default function QuestInput({ navigation }) {
           description,
           hour,
           minute,
+          location,
+        })
+        // .then(() => {
+        //   db.collection("Quests")
+        //     .get()
+        //     .then((querySnapshot) => {
+        //       setMarkers(
+        //         querySnapshot.docs.map((doc) => {
+        //           return (
+        //             <Marker
+        //               coordinate={{
+        //                 latitude: doc.data().location.lat,
+        //                 longitude: doc.data().location.lng,
+        //               }}
+        //             ></Marker>
+        //           );
+        //         })
+        //       );
+        //     });
+        // })
+        .then(() => {
+          navigation.navigate("Map");
         })
         .catch((err) => {
           console.log(err);
         });
     });
-    navigation.navigate("Map");
   };
 
   return (
@@ -87,7 +109,9 @@ export default function QuestInput({ navigation }) {
           placeholder="Where will it be?"
           fetchDetails={true}
           types={["(regions)"]}
-          onPress={(data, details = null) => console.log("details")}
+          onPress={(data, details = null) =>
+            setLocation(details.geometry.location)
+          }
           textInputProps={{
             errorStyle: { color: "red" },
           }}
