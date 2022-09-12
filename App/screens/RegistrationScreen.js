@@ -19,36 +19,54 @@ function RegistrationScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [firstNameValid, setFirstNameValid] = useState(true);
-  const [surnameValid, setSurnameValid] = useState(true);
-  const [passwordValid, setPasswordValid] = useState(true);
-  const [emailValid, setEmailValid] = useState("valid");
-
-  // SUBMIT, Valid states need to be all true and values can't be empty strings
+  const [firstNameValid, setFirstNameValid] = useState("");
+  const [surnameValid, setSurnameValid] = useState("");
+  const [passwordValid, setPasswordValid] = useState("");
+  const [emailValid, setEmailValid] = useState("");
+  const [usernameValid, setUsernameValid] = useState("");
 
   const handleBlurFirstName = () => {
     if (!/[a-z-']+/i.test(firstname)) {
-      setFirstNameValid(false);
+      setFirstNameValid("invalid");
     } else {
-      setFirstNameValid(true);
+      setFirstNameValid("valid");
     }
   };
 
   const handleBlurSurname = () => {
     if (!/[a-z-']+/i.test(surname)) {
-      setSurnameValid(false);
+      setSurnameValid("invalid");
     } else {
-      setSurnameValid(true);
+      setSurnameValid("valid");
     }
   };
 
   const handleBlurPassword = () => {
     if (password.length < 6) {
-      setPasswordValid(false);
+      setPasswordValid("invalid");
     } else {
-      setPasswordValid(true);
+      setPasswordValid("valid");
     }
   };
+
+  const handleBlurUsername = () => {
+    if (!/^\w+$/.test(username)) {
+      setUsernameValid("invalid");
+    } else {
+      db.collection("users")
+          .get()
+          .then((snapshot) => {
+            const match = snapshot.docs.find((doc) => {
+              return doc.data().username === username
+            });
+            if (match) {
+              setUsernameValid("takenUsername");
+            } else {
+              setUsernameValid("valid");
+            }
+          });
+    }
+  }
 
   const handleBlurEmail = () => {
     if (!/\S+@\S+\.\S+/.test(email)) {
@@ -56,7 +74,6 @@ function RegistrationScreen({ navigation }) {
     } else {
       {
         auth.fetchSignInMethodsForEmail(email).then((result) => {
-          console.log(result);
           if (result.length > 0) {
             setEmailValid("takenEmail");
           } else {
@@ -79,21 +96,26 @@ function RegistrationScreen({ navigation }) {
   }
 
   const handleSubmit = () => {
-    navigation.navigate("Profile");
-    auth.createUserWithEmailAndPassword(email, password).then((result) => {
-      console.log("result");
-    });
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        const uid = user.uid;
-        db.collection("users").doc(uid).set({
-          username,
-          email,
-          firstname,
-          surname,
-        });
-      }
-    });
+    if (firstNameValid === "valid" && surnameValid === "valid" && usernameValid === "valid" && emailValid === "valid" && passwordValid === "valid") {
+      console.log("valid")
+    } else {
+      console.log("invalid")
+    }
+    // navigation.navigate("Profile");
+    // auth.createUserWithEmailAndPassword(email, password).then((result) => {
+    //   console.log("result");
+    // });
+    // auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     const uid = user.uid;
+    //     db.collection("users").doc(uid).set({
+    //       username,
+    //       email,
+    //       firstname,
+    //       surname,
+    //     });
+    //   }
+    // });
   };
 
   return (
@@ -125,7 +147,7 @@ function RegistrationScreen({ navigation }) {
           onBlur={handleBlurFirstName}
           maxLength={20}
         ></TextInput>
-        {!firstNameValid && (
+        {firstNameValid === "invalid" && (
           <Text style={styles.invalidWarning}>Invalid firstname</Text>
         )}
 
@@ -138,7 +160,7 @@ function RegistrationScreen({ navigation }) {
           onBlur={handleBlurSurname}
           maxLength={20}
         ></TextInput>
-        {!surnameValid && (
+        {surnameValid === "invalid" && (
           <Text style={styles.invalidWarning}>Invalid surname</Text>
         )}
         <TextInput
@@ -147,8 +169,16 @@ function RegistrationScreen({ navigation }) {
           onChangeText={(typedText) => {
             setUsername(typedText);
           }}
+          onBlur={handleBlurUsername}
           maxLength={15}
         ></TextInput>
+        {usernameValid === "invalidFormat" ? (
+          <Text style={styles.invalidWarning}>Invalid username format</Text>
+        ) : usernameValid === "takenUsername" ? (
+          <Text style={styles.invalidWarning}>Username taken</Text>
+        ) : (
+          <></>
+        )}
         <TextInput
           style={styles.TextInput}
           placeholder="Email"
@@ -176,7 +206,7 @@ function RegistrationScreen({ navigation }) {
           onBlur={handleBlurPassword}
           maxLength={20}
         ></TextInput>
-        {!passwordValid && (
+        {passwordValid === "invalid" && (
           <Text style={styles.invalidWarning}>
             Invalid password. Password must have between 6 and 20 characters.
           </Text>
@@ -256,7 +286,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   invalidWarning: {
-    color: "red",
+    color: "white",
+    backgroundColor: colors.primary,
+    width: "40%",
+    marginLeft: 20,
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
 
