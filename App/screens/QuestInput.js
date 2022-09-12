@@ -13,7 +13,7 @@ import {
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,19 +27,28 @@ export default function QuestInput({ navigation }) {
   });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [time, setTime] = useState(12);
+  const [hour, setHour] = useState(12);
+  const [minute, setMinute] = useState(12);
 
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
 
-  const handleSubmit = (quests) => {
-    const uid = quests.uid;
-    db.collection("Quests").doc(uid).set({
-      title,
-      description,
+  const handleSubmit = () => {
+    auth.onAuthStateChanged(({ uid }) => {
+      db.collection("Quests")
+        .add({
+          uid,
+          title,
+          description,
+          hour,
+          minute,
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
-    console.log(title);
+    navigation.navigate("Map");
   };
 
   return (
@@ -67,7 +76,7 @@ export default function QuestInput({ navigation }) {
           maxLength={50}
           placeholder="Title"
           style={styles.QuestText}
-          onChange={(text) => {
+          onChangeText={(text) => {
             setTitle(text);
           }}
         />
@@ -81,16 +90,31 @@ export default function QuestInput({ navigation }) {
           maxLength={250}
           placeholder="Description"
           style={styles.QuestDescription}
-          onChange={(text) => {
+          onChangeText={(text) => {
             setDescription(text);
           }}
         />
-        <TextInput maxLength={50} placeholder="Time" style={styles.QuestTime} />
+        <TextInput
+          maxLength={2}
+          placeholder="Hour"
+          style={styles.QuestHour}
+          onChangeText={(text) => {
+            setHour(text);
+          }}
+        />
+        <TextInput
+          maxLength={2}
+          placeholder="Minute"
+          style={styles.QuestMinute}
+          onChangeText={(text) => {
+            setMinute(text);
+          }}
+        />
         <TextInput
           maxLength={150}
           placeholder="Link"
           style={styles.QuestLink}
-          onChange={(text) => {
+          onChangeText={(text) => {
             setTime(text);
           }}
         />
@@ -162,9 +186,21 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  QuestTime: {
+  QuestHour: {
     position: "absolute",
     left: 60,
+    top: 280,
+    fontFamily: "Minecraft-Regular",
+    textShadowColor: "black",
+    textShadowRadius: "10",
+    textAlign: "center",
+    paddingBottom: 300,
+    color: "black",
+    fontSize: 20,
+  },
+  QuestMinute: {
+    position: "absolute",
+    left: 120,
     top: 280,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
