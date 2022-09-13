@@ -39,6 +39,10 @@ function QuestLog({ navigation }) {
         >
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
+        <Text style={styles.QuestLog}>Quest Log</Text>
+      </View>
+      <View style={styles.QuestCard}>
+        <Text style={styles.QuestType}>Your Quests:</Text>
       </View>
     </ImageBackground>
   );
@@ -49,13 +53,17 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Bold",
     color: colors.primary,
   },
-  ProfileOuterCard: {
+  QuestCard: {
+    position: "absolute",
+    marginTop: 150,
     margin: 25,
-    height: 170,
-    paddingLeft: 25,
+    width: "85%",
+    height: "60%",
     backgroundColor: colors.secondary,
   },
-  ProfileCard: {
+  QuestType: {
+    margin: 25,
+    fontSize: "20",
     marginTop: 10,
     fontFamily: "Minecraft-Regular",
   },
@@ -89,9 +97,9 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     fontFamily: "Minecraft-Regular",
   },
-  ProfileText: {
-    marginTop: 20,
-    marginLeft: 20,
+  QuestLog: {
+    marginTop: 60,
+    marginLeft: -10,
     textShadowColor: colors.black,
     textShadowRadius: "10",
     textAlign: "center",
