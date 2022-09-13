@@ -26,7 +26,7 @@ function RegistrationScreen({ navigation }) {
   const [usernameValid, setUsernameValid] = useState("");
 
   const handleBlurFirstName = () => {
-    if (!/[a-z-']+/i.test(firstname)) {
+    if (!/^[a-z-']+$/i.test(firstname)) {
       setFirstNameValid("invalid");
     } else {
       setFirstNameValid("valid");
@@ -34,7 +34,7 @@ function RegistrationScreen({ navigation }) {
   };
 
   const handleBlurSurname = () => {
-    if (!/[a-z-']+/i.test(surname)) {
+    if (!/^[a-z-']+$/i.test(surname)) {
       setSurnameValid("invalid");
     } else {
       setSurnameValid("valid");
@@ -51,22 +51,24 @@ function RegistrationScreen({ navigation }) {
 
   const handleBlurUsername = () => {
     if (!/^\w+$/.test(username)) {
-      setUsernameValid("invalid");
+      setUsernameValid("invalidFormat");
+      console.log("invalidFormat");
     } else {
+      console.log("valid");
       db.collection("users")
-          .get()
-          .then((snapshot) => {
-            const match = snapshot.docs.find((doc) => {
-              return doc.data().username === username
-            });
-            if (match) {
-              setUsernameValid("takenUsername");
-            } else {
-              setUsernameValid("valid");
-            }
+        .get()
+        .then((snapshot) => {
+          const match = snapshot.docs.find((doc) => {
+            return doc.data().username === username;
           });
+          if (match) {
+            setUsernameValid("takenUsername");
+          } else {
+            setUsernameValid("valid");
+          }
+        });
     }
-  }
+  };
 
   const handleBlurEmail = () => {
     if (!/\S+@\S+\.\S+/.test(email)) {
@@ -96,26 +98,29 @@ function RegistrationScreen({ navigation }) {
   }
 
   const handleSubmit = () => {
-    if (firstNameValid === "valid" && surnameValid === "valid" && usernameValid === "valid" && emailValid === "valid" && passwordValid === "valid") {
-      console.log("valid")
+    if (
+      firstNameValid === "valid" &&
+      surnameValid === "valid" &&
+      usernameValid === "valid" &&
+      emailValid === "valid" &&
+      passwordValid === "valid"
+    ) {
+      auth.createUserWithEmailAndPassword(email, password).then((result) => {});
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          const uid = user.uid;
+          db.collection("users").doc(uid).set({
+            username,
+            email,
+            firstname,
+            surname,
+          });
+        }
+      });
+      navigation.navigate("Profile");
     } else {
-      console.log("invalid")
+      alert("All fields must be correct before proceding");
     }
-    // navigation.navigate("Profile");
-    // auth.createUserWithEmailAndPassword(email, password).then((result) => {
-    //   console.log("result");
-    // });
-    // auth.onAuthStateChanged((user) => {
-    //   if (user) {
-    //     const uid = user.uid;
-    //     db.collection("users").doc(uid).set({
-    //       username,
-    //       email,
-    //       firstname,
-    //       surname,
-    //     });
-    //   }
-    // });
   };
 
   return (
@@ -148,7 +153,7 @@ function RegistrationScreen({ navigation }) {
           maxLength={20}
         ></TextInput>
         {firstNameValid === "invalid" && (
-          <Text style={styles.invalidWarning}>Invalid firstname</Text>
+          <Text style={styles.invalidWarning}>Invalid first name</Text>
         )}
 
         <TextInput
@@ -189,7 +194,7 @@ function RegistrationScreen({ navigation }) {
           maxLength={50}
         ></TextInput>
         {emailValid === "invalidFormat" ? (
-          <Text style={styles.invalidWarning}>Invalid email format.</Text>
+          <Text style={styles.invalidWarning}>Invalid email format</Text>
         ) : emailValid === "takenEmail" ? (
           <Text style={styles.invalidWarning}>Email taken</Text>
         ) : (
@@ -208,7 +213,7 @@ function RegistrationScreen({ navigation }) {
         ></TextInput>
         {passwordValid === "invalid" && (
           <Text style={styles.invalidWarning}>
-            Invalid password. Password must have between 6 and 20 characters.
+            Invalid password Password must have between 6 and 20 characters
           </Text>
         )}
       </View>
@@ -288,7 +293,7 @@ const styles = StyleSheet.create({
   invalidWarning: {
     color: "white",
     backgroundColor: colors.primary,
-    width: "40%",
+    width: "45%",
     marginLeft: 20,
     textAlign: "center",
     fontWeight: "bold",
