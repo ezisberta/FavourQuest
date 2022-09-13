@@ -1,10 +1,19 @@
-import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Dimensions,
+  Image,
+} from "react-native";
 import { useState, useEffect, useContext } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { db } from "../../firebase";
 import { UserContext } from "../../App";
+import Quest from "./Quest";
 
 export default function Map({ navigation }) {
   const { user } = useContext(UserContext);
@@ -58,22 +67,46 @@ export default function Map({ navigation }) {
                   latitude: doc.data().location.lat,
                   longitude: doc.data().location.lng,
                 }}
-              ></Marker>
+                onPress={handleQuestMarkerPress}
+              >
+                <Image
+                  source={
+                    user === doc.data().uid
+                      ? require("../assets/images/userExclamationMark.png")
+                      : require("../assets/images/exclamationMark.png")
+                  }
+                  resizeMode="contain"
+                  style={{ width: 80, height: 80 }}
+                ></Image>
+              </Marker>
             );
           })
         );
       });
   }, []);
 
+  const handleQuestMarkerPress = () => {
+    navigation.navigate("Quest");
+  };
+
   return (
-    <View style={styles.View}>
+    <SafeAreaView style={styles.View}>
       <Mapview region={region} style={styles.Map} provider={PROVIDER_GOOGLE}>
         <Marker
-          pinColor={colors.white}
+          // pinColor={colors.white}
+
+          // icon={require("../assets/images/SkeleAva.png")}
+
           coordinate={pinPoint}
           draggable={true}
           style={styles.Marker}
-        ></Marker>
+        >
+          <Image
+            source={require("../assets/images/SkeleAva.png")}
+            resizeMode="contain"
+            style={{ width: 100, height: 100 }}
+          ></Image>
+        </Marker>
         {markers}
         <Pressable
           onPress={() => {
@@ -84,34 +117,34 @@ export default function Map({ navigation }) {
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
         <Text style={styles.MapText}></Text>
-        <View style={styles.Menu}>
-          <Text
-            onPress={() => {
-              navigation.navigate("Profile");
-            }}
-            style={styles.NavButton}
-          >
-            Profile
-          </Text>
-          <Text
-            onPress={() => {
-              navigation.navigate("Quest Log");
-            }}
-            style={styles.NavButton}
-          >
-            Quest Log
-          </Text>
-          <Text
-            onPress={() => {
-              navigation.navigate("Create Quest");
-            }}
-            style={styles.NavButton}
-          >
-            Create Quest
-          </Text>
-        </View>
       </Mapview>
-    </View>
+      <View style={styles.Menu}>
+        <Text
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+          style={styles.NavButton}
+        >
+          Profile
+        </Text>
+        <Text
+          onPress={() => {
+            navigation.navigate("Quest Log");
+          }}
+          style={styles.NavButton}
+        >
+          Quest Log
+        </Text>
+        <Text
+          onPress={() => {
+            navigation.navigate("Create Quest");
+          }}
+          style={styles.NavButton}
+        >
+          Create Quest
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -120,16 +153,17 @@ const styles = StyleSheet.create({
     width: 50,
   },
   Menu: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginTop: 500,
     width: "100%",
     height: 70,
     backgroundColor: colors.primary,
   },
   Map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    flex: 8,
+    // width: Dimensions.get("window").width,
+    // height: Dimensions.get("window").height,
   },
   Marker: {},
   MapText: {
@@ -141,24 +175,27 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Bold",
   },
   BackArrow: {
+    marginLeft: 32,
+    marginTop: 18,
     color: colors.white,
     fontSize: 40,
     textAlign: "center",
-    margin: -6,
+    margin: -15,
   },
   BackButtonBorder: {
     margin: 25,
     width: 40,
     height: 40,
     backgroundColor: colors.primary,
+    alignContent: "center",
+    justifyContent: "center",
   },
   View: {
     flex: 1,
   },
   NavButton: {
+    marginTop: 20,
     fontSize: 15,
-    height: 50,
-    margin: 10,
     fontFamily: "Minecraft-Regular",
   },
 });
