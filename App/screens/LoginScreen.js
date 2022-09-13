@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Text,
   TextInput,
@@ -11,8 +11,10 @@ import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
 import { auth } from "../../firebase";
+import { UserContext } from "../../App";
 
 function LoginScreen({ navigation }) {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,7 +32,10 @@ function LoginScreen({ navigation }) {
   const handleSubmit = () => {
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(() => navigation.navigate("Profile"))
+      .then((result) => {
+        setUser(result.user.uid);
+        navigation.navigate("Profile");
+      })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;

@@ -1,11 +1,13 @@
 import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { db } from "../../firebase";
+import { UserContext } from "../../App";
 
 export default function Map({ navigation }) {
+  const { user } = useContext(UserContext);
   const [pinPoint, setPinPoint] = useState({
     latitude: 54.1361346,
     longitude: -1.6229181,
@@ -51,7 +53,7 @@ export default function Map({ navigation }) {
             return (
               <Marker
                 key={doc.id}
-                pinColor="blue"
+                pinColor={user === doc.data().uid ? "purple" : "blue"}
                 coordinate={{
                   latitude: doc.data().location.lat,
                   longitude: doc.data().location.lng,
