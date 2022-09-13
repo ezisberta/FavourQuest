@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -11,11 +11,14 @@ import {
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
+import { db } from "../../firebase";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Quest({ navigation }) {
+  const [quest, setQuest] = useState([]);
+
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -27,6 +30,20 @@ export default function Quest({ navigation }) {
     return <LoadingPage />;
   }
 
+  const questRef = db.collection("Quests");
+
+  questRef
+    .doc("p8EO2l6K9u53qJZ2VMtR")
+    // .where("uid", "==", "744eXBn3kBdnkd8npZiMHTQsxP13")
+    .get()
+    .then((querySnapshot) => {
+      const questData = querySnapshot.data();
+      setQuest(questData);
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
+
   return (
     <ImageBackground
       style={styles.background}
@@ -34,7 +51,7 @@ export default function Quest({ navigation }) {
     >
       <Pressable
         onPress={() => {
-          navigation.navigate("Profile");
+          navigation.navigate("Map");
         }}
         style={styles.BackButtonBorder}
       >
@@ -46,11 +63,13 @@ export default function Quest({ navigation }) {
           source={require("../assets/images/scroll.jpg")}
         ></Image>
         <Text style={styles.QuestHeader}>Quest:</Text>
-        <Text style={styles.QuestText}>Please help me mow my lawn!</Text>
-        <Text style={styles.QuestLocation}>Location:</Text>
-        <Text style={styles.QuestDescription}>1 hour required</Text>
-        <Text style={styles.QuestTime}>Time: 18:00</Text>
-        <Text style={styles.QuestLink}></Text>
+        <Text style={styles.QuestText}>{quest.title}</Text>
+
+        <Text style={styles.QuestDescription}>{quest.description}</Text>
+
+        <Text style={styles.QuestTime}>
+          Time: {quest.hour}:{quest.minute}
+        </Text>
         <Pressable
           onPress={() => {
             navigation.navigate("Map");
@@ -170,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   DeclineButtonBorder: {
-    backgroundColor: "red",
+    backgroundColor: colors.primary,
     margin: 25,
     width: 80,
     height: 40,
@@ -203,7 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   AcceptButtonBorder: {
-    backgroundColor: "green",
+    backgroundColor: colors.secondary,
     margin: 25,
     width: 80,
     height: 40,

@@ -121,6 +121,7 @@ function RegistrationScreen({ navigation }) {
             email,
             firstname,
             surname,
+            quests: [],
           });
         }
       });
