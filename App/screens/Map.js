@@ -50,6 +50,7 @@ export default function Map({ navigation }) {
           querySnapshot.docs.map((doc) => {
             return (
               <Marker
+                key={doc.id}
                 pinColor="blue"
                 coordinate={{
                   latitude: doc.data().location.lat,

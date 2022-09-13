@@ -67,7 +67,7 @@ export default function QuestInput({ navigation }) {
         //     });
         // })
         .then(() => {
-          navigation.navigate("Map");
+          navigation.navigate("Quest");
         })
         .catch((err) => {
           console.log(err);
