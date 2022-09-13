@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "70%",
     zIndex: 1,
-    left: 45,
-    top: 300,
+    left: 60,
+    top: 160,
   },
   background: {
     flex: 1,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   QuestText: {
     position: "absolute",
     left: 60,
-    top: 160,
+    top: 220,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -201,22 +201,11 @@ const styles = StyleSheet.create({
     width: null,
     alignItems: "stretch",
   },
-  QuestLocation: {
-    position: "absolute",
-    left: 60,
-    top: 190,
-    fontFamily: "Minecraft-Regular",
-    textShadowColor: "black",
-    textShadowRadius: "10",
-    textAlign: "center",
-    paddingBottom: 300,
-    color: "black",
-    fontSize: 20,
-  },
+
   QuestDescription: {
     position: "absolute",
     left: 60,
-    top: 190,
+    top: 260,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -228,7 +217,7 @@ const styles = StyleSheet.create({
   QuestHour: {
     position: "absolute",
     left: 60,
-    top: 250,
+    top: 310,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -240,7 +229,7 @@ const styles = StyleSheet.create({
   QuestMinute: {
     position: "absolute",
     left: 120,
-    top: 250,
+    top: 310,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",

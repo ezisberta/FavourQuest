@@ -105,7 +105,14 @@ function RegistrationScreen({ navigation }) {
       emailValid === "valid" &&
       passwordValid === "valid"
     ) {
-      auth.createUserWithEmailAndPassword(email, password).then((result) => {});
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       auth.onAuthStateChanged((user) => {
         if (user) {
           const uid = user.uid;
