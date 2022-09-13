@@ -18,7 +18,6 @@ function ProfileScreen({ navigation }) {
     auth.onAuthStateChanged((user) => {
       if (user) {
         const uid = user.uid;
-        console.log(uid);
         db.collection("users")
           .doc(uid)
           .get()

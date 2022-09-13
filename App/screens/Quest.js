@@ -32,6 +32,14 @@ export default function Quest({ navigation }) {
       style={styles.background}
       source={require("../assets/images/Pixel1.png")}
     >
+      <Pressable
+        onPress={() => {
+          navigation.navigate("Profile");
+        }}
+        style={styles.BackButtonBorder}
+      >
+        <Text style={styles.BackArrow}>⇤</Text>
+      </Pressable>
       <SafeAreaView>
         <Image
           style={styles.scroll}
@@ -65,6 +73,18 @@ export default function Quest({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  BackArrow: {
+    color: colors.white,
+    fontSize: 40,
+    textAlign: "center",
+    margin: -6,
+  },
+  BackButtonBorder: {
+    margin: 25,
+    width: 40,
+    height: 40,
+    backgroundColor: colors.primary,
+  },
   background: {
     flex: 1,
     justifyContent: "center",

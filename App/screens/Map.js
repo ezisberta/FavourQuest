@@ -1,23 +1,17 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Image,
-} from "react-native";
-import { useState, useEffect } from "react";
+import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
+import { useState, useEffect, useContext } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
-
+import { db } from "../../firebase";
+import { UserContext } from "../../App";
 
 export default function Map({ navigation }) {
+  const { user } = useContext(UserContext);
   const [pinPoint, setPinPoint] = useState({
-    latitude: 33.8087146,
+    latitude: 54.1361346,
     longitude: -1.6229181,
   });
-
   const [region, setRegion] = useState({
     latitude: pinPoint.latitude,
     longitude: pinPoint.longitude,
@@ -25,12 +19,18 @@ export default function Map({ navigation }) {
     longitudeDelta: 0.0421,
   });
 
+  const [markers, setMarkers] = useState([]);
+
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setErrorMsg("Permission to access location was denied");
+          return;
+        }
+      } catch (error) {
+        console.log(error);
       }
 
       let location = await Location.getCurrentPositionAsync({});
@@ -45,17 +45,36 @@ export default function Map({ navigation }) {
         longitudeDelta: 0.0421,
       });
     })();
+    db.collection("Quests")
+      .get()
+      .then((querySnapshot) => {
+        setMarkers(
+          querySnapshot.docs.map((doc) => {
+            return (
+              <Marker
+                key={doc.id}
+                pinColor={user === doc.data().uid ? "purple" : "blue"}
+                coordinate={{
+                  latitude: doc.data().location.lat,
+                  longitude: doc.data().location.lng,
+                }}
+              ></Marker>
+            );
+          })
+        );
+      });
   }, []);
 
   return (
     <View style={styles.View}>
       <Mapview region={region} style={styles.Map} provider={PROVIDER_GOOGLE}>
         <Marker
+          pinColor={colors.white}
           coordinate={pinPoint}
           draggable={true}
-          icon={require("../assets/images/SkeleAva.png")}
           style={styles.Marker}
         ></Marker>
+        {markers}
         <Pressable
           onPress={() => {
             navigation.navigate("Profile");
@@ -64,8 +83,33 @@ export default function Map({ navigation }) {
         >
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
-        <Text style={styles.MapText}>Map</Text>
-        <View style={styles.Menu}></View>
+        <Text style={styles.MapText}></Text>
+        <View style={styles.Menu}>
+          <Text
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+            style={styles.NavButton}
+          >
+            Profile
+          </Text>
+          <Text
+            onPress={() => {
+              navigation.navigate("Quest Log");
+            }}
+            style={styles.NavButton}
+          >
+            Quest Log
+          </Text>
+          <Text
+            onPress={() => {
+              navigation.navigate("Create Quest");
+            }}
+            style={styles.NavButton}
+          >
+            Create Quest
+          </Text>
+        </View>
       </Mapview>
     </View>
   );
@@ -76,7 +120,9 @@ const styles = StyleSheet.create({
     width: 50,
   },
   Menu: {
-    marginTop: 460,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 500,
     width: "100%",
     height: 70,
     backgroundColor: colors.primary,
@@ -85,7 +131,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  Marker: { Width: 10 },
+  Marker: {},
   MapText: {
     textShadowColor: colors.black,
     textShadowRadius: "10",
@@ -108,5 +154,11 @@ const styles = StyleSheet.create({
   },
   View: {
     flex: 1,
+  },
+  NavButton: {
+    fontSize: 15,
+    height: 50,
+    margin: 10,
+    fontFamily: "Minecraft-Regular",
   },
 });

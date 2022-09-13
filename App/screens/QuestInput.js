@@ -13,6 +13,9 @@ import {
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
+import { auth, db } from "../../firebase";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { googleKey } from "../secretkey/secretKey";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -26,11 +29,52 @@ export default function QuestInput({ navigation }) {
   });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [time, setTime] = useState(12);
+  const [hour, setHour] = useState(12);
+  const [minute, setMinute] = useState(12);
+  const [location, setLocation] = useState({});
+  // const [markers, setMarkers] = useState([]);
 
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
+
+  const handleSubmit = () => {
+    auth.onAuthStateChanged(({ uid }) => {
+      db.collection("Quests")
+        .add({
+          uid,
+          title,
+          description,
+          hour,
+          minute,
+          location,
+        })
+        // .then(() => {
+        //   db.collection("Quests")
+        //     .get()
+        //     .then((querySnapshot) => {
+        //       setMarkers(
+        //         querySnapshot.docs.map((doc) => {
+        //           return (
+        //             <Marker
+        //               coordinate={{
+        //                 latitude: doc.data().location.lat,
+        //                 longitude: doc.data().location.lng,
+        //               }}
+        //             ></Marker>
+        //           );
+        //         })
+        //       );
+        //     });
+        // })
+        .then(() => {
+          navigation.navigate("Quest");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  };
 
   return (
     <ImageBackground
@@ -57,39 +101,56 @@ export default function QuestInput({ navigation }) {
           maxLength={50}
           placeholder="Title"
           style={styles.QuestText}
-          onChange={(text) => {
+          onChangeText={(text) => {
             setTitle(text);
           }}
         />
-        <TextInput
-          maxLength={50}
-          placeholder="Location"
-          style={styles.QuestLocation}
-          //???????????
+
+        <GooglePlacesAutocomplete
+          placeholder="Where will it be?"
+          fetchDetails={true}
+          types={["(regions)"]}
+          onPress={(data, details = null) =>
+            setLocation(details.geometry.location)
+          }
+          textInputProps={{
+            errorStyle: { color: "red" },
+          }}
+          GooglePlacesSearchQuery={{ rankby: "distance" }}
+          query={{
+            key: googleKey,
+            language: "en",
+            components: "country:uk",
+            radius: 3000,
+          }}
+          styles={{ container: { ...styles.searchContainer } }}
         />
+
         <TextInput
           maxLength={250}
           placeholder="Description"
           style={styles.QuestDescription}
-          onChange={(text) => {
+          onChangeText={(text) => {
             setDescription(text);
           }}
         />
-        <TextInput maxLength={50} placeholder="Time" style={styles.QuestTime} />
         <TextInput
-          maxLength={150}
-          placeholder="Link"
-          style={styles.QuestLink}
-          onChange={(text) => {
-            setTime(text);
+          maxLength={2}
+          placeholder="Hour"
+          style={styles.QuestHour}
+          onChangeText={(text) => {
+            setHour(text);
           }}
         />
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
+        <TextInput
+          maxLength={2}
+          placeholder="Minute"
+          style={styles.QuestMinute}
+          onChangeText={(text) => {
+            setMinute(text);
           }}
-          style={styles.Submit}
-        >
+        />
+        <Pressable onPress={handleSubmit} style={styles.Submit}>
           <Text style={styles.SubmitText}>Submit</Text>
         </Pressable>
       </SafeAreaView>
@@ -98,6 +159,13 @@ export default function QuestInput({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  searchContainer: {
+    position: "absolute",
+    width: "70%",
+    zIndex: 1,
+    left: 45,
+    top: 300,
+  },
   background: {
     flex: 1,
     justifyContent: "center",
@@ -148,7 +216,7 @@ const styles = StyleSheet.create({
   QuestDescription: {
     position: "absolute",
     left: 60,
-    top: 220,
+    top: 190,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -157,10 +225,10 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  QuestTime: {
+  QuestHour: {
     position: "absolute",
     left: 60,
-    top: 280,
+    top: 250,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -169,10 +237,10 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  QuestLink: {
+  QuestMinute: {
     position: "absolute",
-    left: 60,
-    top: 310,
+    left: 120,
+    top: 250,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -181,8 +249,11 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
+
   Submit: {
-    marginLeft: 130,
+    marginLeft: 140,
+    marginTop: 370,
+    position: "absolute",
     width: 70,
     height: 40,
     backgroundColor: colors.primary,
