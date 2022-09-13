@@ -11,26 +11,30 @@ import QuestInput from "./App/screens/QuestInput";
 import QuestLog from "./App/screens/QuestLog";
 import { createContext, useState } from "react";
 export const UserContext = createContext();
+export const QuestContext = createContext();
 
 const Stack = createStackNavigator();
 export default function App() {
   const [user, setUser] = useState("");
+  const [quest, setQuest] = useState("");
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Registration" component={RegistrationScreen} />
-          <Stack.Screen name="Quest" component={Quest} />
-          <Stack.Screen name="Create Quest" component={QuestInput} />
-          <Stack.Screen name="Quest Log" component={QuestLog} />
-          <Stack.Screen name="Map" component={Map} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Edit Details" component={EditDetails} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <QuestContext.Provider value={{ quest, setQuest }}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Registration" component={RegistrationScreen} />
+            <Stack.Screen name="Quest" component={Quest} />
+            <Stack.Screen name="Create Quest" component={QuestInput} />
+            <Stack.Screen name="Quest Log" component={QuestLog} />
+            <Stack.Screen name="Map" component={Map} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Edit Details" component={EditDetails} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </QuestContext.Provider>
     </UserContext.Provider>
   );
 }

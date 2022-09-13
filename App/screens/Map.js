@@ -12,11 +12,13 @@ import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { db } from "../../firebase";
-import { UserContext } from "../../App";
+import { UserContext, QuestContext } from "../../App";
 import Quest from "./Quest";
 
 export default function Map({ navigation }) {
   const { user } = useContext(UserContext);
+  const { quest, setQuest } = useContext(QuestContext);
+
   const [pinPoint, setPinPoint] = useState({
     latitude: 54.1361346,
     longitude: -1.6229181,
@@ -85,7 +87,11 @@ export default function Map({ navigation }) {
       });
   }, []);
 
-  const handleQuestMarkerPress = () => {
+  const handleQuestMarkerPress = (event) => {
+    const questKey =
+      event.target._internalFiberInstanceHandleDEV._debugOwner.key;
+    console.log(questKey, "<<<<<EVENT");
+    setQuest(questKey);
     navigation.navigate("Quest");
   };
 

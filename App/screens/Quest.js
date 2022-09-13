@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -12,12 +12,14 @@ import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { db } from "../../firebase";
+import { QuestContext } from "../../App";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Quest({ navigation }) {
-  const [quest, setQuest] = useState([]);
+  const [questArr, setQuestArr] = useState([]);
+  const { quest } = useContext(QuestContext);
 
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
@@ -33,12 +35,12 @@ export default function Quest({ navigation }) {
   const questRef = db.collection("Quests");
 
   questRef
-    .doc("p8EO2l6K9u53qJZ2VMtR")
+    .doc(quest)
     // .where("uid", "==", "744eXBn3kBdnkd8npZiMHTQsxP13")
     .get()
     .then((querySnapshot) => {
       const questData = querySnapshot.data();
-      setQuest(questData);
+      setQuestArr(questData);
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);
@@ -63,12 +65,12 @@ export default function Quest({ navigation }) {
           source={require("../assets/images/scroll.jpg")}
         ></Image>
         <Text style={styles.QuestHeader}>Quest:</Text>
-        <Text style={styles.QuestText}>{quest.title}</Text>
+        <Text style={styles.QuestText}>{questArr.title}</Text>
 
-        <Text style={styles.QuestDescription}>{quest.description}</Text>
+        <Text style={styles.QuestDescription}>{questArr.description}</Text>
 
         <Text style={styles.QuestTime}>
-          Time: {quest.hour}:{quest.minute}
+          Time: {questArr.hour}:{questArr.minute}
         </Text>
         <Pressable
           onPress={() => {
