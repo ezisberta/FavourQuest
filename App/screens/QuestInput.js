@@ -15,6 +15,7 @@ import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { auth, db } from "../../firebase";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { googleKey } from "../secretkey/secretKey";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -117,7 +118,7 @@ export default function QuestInput({ navigation }) {
           }}
           GooglePlacesSearchQuery={{ rankby: "distance" }}
           query={{
-            key: "AIzaSyDuLAkmUitX00eKmYkDwD3zsc7MuOrmFuc",
+            key: googleKey,
             language: "en",
             components: "country:uk",
             radius: 3000,
