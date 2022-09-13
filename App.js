@@ -9,12 +9,11 @@ import Quest from "./App/screens/Quest";
 import LoginScreen from "./App/screens/LoginScreen";
 import QuestInput from "./App/screens/QuestInput";
 import QuestLog from "./App/screens/QuestLog";
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 export const UserContext = createContext();
 
 const Stack = createStackNavigator();
 export default function App() {
-  // const {userObj} = useContext(UserContext)
   const [user, setUser] = useState("");
 
   return (
