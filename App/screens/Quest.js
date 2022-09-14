@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   Image,
   SafeAreaView,
   Pressable,
+  View,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
@@ -29,22 +30,21 @@ export default function Quest({ navigation }) {
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
 
-  if (!fontsLoaded) {
-    return <LoadingPage />;
-  }
-
   const questRef = db.collection("Quests");
 
-  questRef
-    .doc(quest)
-    .get()
-    .then((querySnapshot) => {
-      const questData = querySnapshot.data();
-      setQuestArr(questData);
-    })
-    .catch((error) => {
-      console.log("Error getting documents: ", error);
-    });
+  useEffect(() => {
+    questRef
+      .doc(quest)
+      .get()
+      .then((querySnapshot) => {
+        console.log("Quest line 42");
+        const questData = querySnapshot.data();
+        setQuestArr(questData);
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+  }, []);
 
   const acceptQuest = () => {
     questRef
@@ -54,6 +54,7 @@ export default function Quest({ navigation }) {
         questAcceptedBy: user,
       })
       .then(() => {
+        console.log("Quest line 59 (acceptQuest)");
         navigation.navigate("Map");
       })
       .catch((err) => {
@@ -61,24 +62,31 @@ export default function Quest({ navigation }) {
       });
   };
 
+  if (!fontsLoaded) {
+    return <LoadingPage />;
+  }
+
   return (
     <ImageBackground
       style={styles.background}
       source={require("../assets/images/Pixel1.png")}
     >
-      <Pressable
-        onPress={() => {
-          navigation.navigate("Map");
-        }}
-        style={styles.BackButtonBorder}
-      >
-        <Text style={styles.BackArrow}>⇤</Text>
-      </Pressable>
+      <View>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Map");
+          }}
+          style={styles.BackButtonBorder}
+        >
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+      </View>
       <SafeAreaView>
         <Image
           style={styles.scroll}
           source={require("../assets/images/scroll.jpg")}
         ></Image>
+
         <Text style={styles.QuestHeader}>Quest:</Text>
         <Text style={styles.QuestText}>{questArr.title}</Text>
 

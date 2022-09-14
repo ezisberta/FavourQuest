@@ -7,12 +7,13 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { db } from "../../firebase";
 import { UserContext, QuestContext } from "../../App";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Map({ navigation }) {
   const { user } = useContext(UserContext);
@@ -31,62 +32,66 @@ export default function Map({ navigation }) {
 
   const [markers, setMarkers] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
-          return;
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        try {
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== "granted") {
+            setErrorMsg("Permission to access location was denied");
+            return;
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setPinPoint({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-      setRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    })();
-  }, []);
-  db.collection("Quests")
-    .where("questAccepted", "==", false)
-    .get()
-    .then((querySnapshot) => {
-      setMarkers(
-        querySnapshot.docs.map((doc) => {
-          console.log("LOOPINGGGSSSS");
-          return (
-            <Marker
-              key={doc.id}
-              pinColor={user === doc.data().uid ? "purple" : "blue"}
-              coordinate={{
-                latitude: doc.data().location.lat,
-                longitude: doc.data().location.lng,
-              }}
-              onPress={handleQuestMarkerPress}
-            >
-              <Image
-                source={
-                  user === doc.data().uid
-                    ? require("../assets/images/userExclamationMark.png")
-                    : require("../assets/images/exclamationMark.png")
-                }
-                resizeMode="contain"
-                style={{ width: 80, height: 80 }}
-              ></Image>
-            </Marker>
+        console.log("Map line 46");
+
+        let location = await Location.getCurrentPositionAsync({});
+        setPinPoint({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+        setRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      })();
+      db.collection("Quests")
+        .where("questAccepted", "==", false)
+        .get()
+        .then((querySnapshot) => {
+          console.log("Maps - Line 63");
+          setMarkers(
+            querySnapshot.docs.map((doc) => {
+              return (
+                <Marker
+                  key={doc.id}
+                  pinColor={user === doc.data().uid ? "purple" : "blue"}
+                  coordinate={{
+                    latitude: doc.data().location.lat,
+                    longitude: doc.data().location.lng,
+                  }}
+                  onPress={handleQuestMarkerPress}
+                >
+                  <Image
+                    source={
+                      user === doc.data().uid
+                        ? require("../assets/images/userExclamationMark.png")
+                        : require("../assets/images/exclamationMark.png")
+                    }
+                    resizeMode="contain"
+                    style={{ width: 80, height: 80 }}
+                  ></Image>
+                </Marker>
+              );
+            })
           );
-        })
-      );
-    });
+        });
+    }, [])
+  );
 
   const handleQuestMarkerPress = (event) => {
     const questKey =

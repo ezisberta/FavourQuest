@@ -22,10 +22,10 @@ function QuestLog({ navigation }) {
       .where("questAcceptedBy", "==", user)
       .get()
       .then((querySnapshot) => {
-        console.log(querySnapshot.docs[0].data().title, "<<<HERE IT IS");
+        console.log("QuestLog - Line 26");
         setMyQuests(
           querySnapshot.docs.map((doc) => {
-            return <Text key={doc.id}>{doc.title}</Text>;
+            return <Text key={doc.id}>{doc.data().title}</Text>;
           })
         );
       })
@@ -69,7 +69,7 @@ function QuestLog({ navigation }) {
       </View>
       <View style={styles.QuestCard}>
         <Text style={styles.QuestType}>Your Quests:</Text>
-        {/* {questData} */}
+        {myQuests}
       </View>
     </ImageBackground>
   );
