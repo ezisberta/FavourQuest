@@ -10,7 +10,7 @@ import {
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
-import {  db } from "../../firebase";
+import { db } from "../../firebase";
 import { UserContext, QuestContext } from "../../App";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -19,7 +19,7 @@ function QuestLog({ navigation }) {
   const { user } = useContext(UserContext);
   const { setQuest } = useContext(QuestContext);
 
-  useFocusEffect (
+  useFocusEffect(
     useCallback(() => {
       db.collection("Quests")
         .where("questAcceptedBy", "==", user)
@@ -36,7 +36,7 @@ function QuestLog({ navigation }) {
                     navigation.navigate("Quest");
                   }}
                 >
-                  <Text>{doc.data().title}</Text>
+                  <Text style={styles.QuestText}>{doc.data().title}</Text>
                 </Pressable>
               );
             })
@@ -70,12 +70,15 @@ function QuestLog({ navigation }) {
           querySnapshot.docs.map((doc) => {
             return (
               <Pressable
+                key={doc.id}
                 onPress={() => {
                   setQuest(doc.id);
                   navigation.navigate("Quest");
                 }}
               >
-                <Text key={doc.id}>{doc.data().title}</Text>
+                <Text style={styles.QuestText} key={doc.id}>
+                  {doc.data().title}
+                </Text>
               </Pressable>
             );
           })
@@ -96,6 +99,7 @@ function QuestLog({ navigation }) {
           querySnapshot.docs.map((doc) => {
             return (
               <Pressable
+                key={doc.id}
                 onPress={() => {
                   setQuest(doc.id);
                   navigation.navigate("Quest");
@@ -125,12 +129,15 @@ function QuestLog({ navigation }) {
           querySnapshot.docs.map((doc) => {
             return (
               <Pressable
+                key={doc.id}
                 onPress={() => {
                   setQuest(doc.id);
                   navigation.navigate("Quest");
                 }}
               >
-                <Text key={doc.id}>{doc.data().title}</Text>
+                <Text style={styles.QuestText} key={doc.id}>
+                  {doc.data().title}
+                </Text>
               </Pressable>
             );
           })
@@ -292,7 +299,8 @@ const styles = StyleSheet.create({
   QuestText: {
     fontSize: 20,
     fontFamily: "Minecraft-Regular",
-    margin: 30,
+    marginLeft: 20,
+    marginTop: 20,
   },
 });
 
