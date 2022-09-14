@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text } from "react-native";
 import { useFonts } from "expo-font";
 export default function LoadingPage() {
   const [fontsLoaded] = useFonts({

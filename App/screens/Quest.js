@@ -37,12 +37,12 @@ export default function Quest({ navigation }) {
       .doc(quest)
       .get()
       .then((querySnapshot) => {
-        console.log("Quest line 42");
         const questData = querySnapshot.data();
         setQuestArr(questData);
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   }, []);
 
@@ -54,11 +54,11 @@ export default function Quest({ navigation }) {
         questAcceptedBy: user,
       })
       .then(() => {
-        console.log("Quest line 59 (acceptQuest)");
         navigation.navigate("Map");
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -74,6 +74,7 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -88,11 +89,11 @@ export default function Quest({ navigation }) {
         questCompleted: true,
       })
       .then(() => {
-        console.log("Quest line 73");
         navigation.navigate("Map");
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -105,6 +106,7 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   }
 

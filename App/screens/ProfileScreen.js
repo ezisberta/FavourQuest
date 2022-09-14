@@ -22,10 +22,12 @@ function ProfileScreen({ navigation }) {
           .doc(uid)
           .get()
           .then((snapshot) => {
-            //  console.log(snapshot.data());
             const data = snapshot.data();
             setUsername(data.username);
-          });
+          }).catch((err) => {
+            console.log(err);
+            throw err;
+          })
       }
     });
   }, []);
@@ -44,7 +46,10 @@ function ProfileScreen({ navigation }) {
   const handleSignOut = () => {
     auth.signOut().then(() => {
       navigation.navigate("Welcome");
-    });
+    }).catch((err) => {
+      console.log(err);
+      throw err;
+    })
   };
 
   return (
@@ -61,7 +66,6 @@ function ProfileScreen({ navigation }) {
         >
           <Text style={styles.BackArrow}>⇤</Text>
         </Pressable>
-        {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
         <Text style={styles.ProfileText}>Profile</Text>
       </View>
       <View style={styles.ProfileOuterCard}>
