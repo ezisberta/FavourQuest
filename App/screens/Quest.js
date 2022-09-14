@@ -41,8 +41,8 @@ export default function Quest({ navigation }) {
         const questData = querySnapshot.data();
         setQuestArr(questData);
       })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -126,7 +126,17 @@ export default function Quest({ navigation }) {
               <Text style={styles.Cancel}>Cancel</Text>
             </Pressable>
           </View>
-        ) : (
+        ) : questArr.questAcceptedBy === user &&
+          questArr.questCompleted === false ? (
+          <Pressable
+            onPress={() => {
+              abandonQuest();
+            }}
+            style={styles.AbandonButtonBorder}
+          >
+            <Text style={styles.Accept}>Abandon</Text>
+          </Pressable>
+        ) : questArr.questCompleted === false ? (
           <Pressable
             onPress={() => {
               acceptQuest();
@@ -135,6 +145,8 @@ export default function Quest({ navigation }) {
           >
             <Text style={styles.Accept}>Accept</Text>
           </Pressable>
+        ) : (
+          <Text style={styles.QuestComplete}>Quest Complete</Text>
         )}
       </SafeAreaView>
     </ImageBackground>
@@ -142,6 +154,17 @@ export default function Quest({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  QuestComplete: {
+    fontSize: "25",
+    position: "absolute",
+    fontFamily: "Minecraft-Bold",
+    color: colors.secondary,
+    margin: 25,
+    width: "100%",
+    height: 40,
+    left: "9%",
+    bottom: 100,
+  },
   BackArrow: {
     color: colors.white,
     fontSize: 40,
@@ -256,6 +279,17 @@ const styles = StyleSheet.create({
     width: 80,
     height: 40,
     left: "28%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  AbandonButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 95,
+    height: 40,
+    left: "26%",
     bottom: 100,
     position: "absolute",
     borderRadius: "5%",

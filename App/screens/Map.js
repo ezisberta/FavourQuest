@@ -106,15 +106,7 @@ export default function Map({ navigation }) {
   return (
     <SafeAreaView style={styles.View}>
       <Mapview region={region} style={styles.Map} provider={PROVIDER_GOOGLE}>
-        <Marker
-          // pinColor={colors.white}
-
-          // icon={require("../assets/images/SkeleAva.png")}
-
-          coordinate={pinPoint}
-          draggable={true}
-          style={styles.Marker}
-        >
+        <Marker coordinate={pinPoint} draggable={true} style={styles.Marker}>
           <Image
             source={require("../assets/images/SkeleAva.png")}
             resizeMode="contain"
