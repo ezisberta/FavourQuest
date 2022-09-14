@@ -62,6 +62,21 @@ export default function Quest({ navigation }) {
       });
   };
 
+  const abandonQuest = () => {
+    questRef
+      .doc(quest)
+      .update({
+        questAccepted: false,
+        questAcceptedBy: "",
+      })
+      .then(() => {
+        navigation.navigate("Quest Log");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
@@ -80,6 +95,18 @@ export default function Quest({ navigation }) {
         console.log(err);
       });
   };
+
+  const cancelQuest = () => {
+    questRef
+      .doc(quest)
+      .delete()
+      .then(() => {
+        navigation.navigate("Quest Log");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <ImageBackground

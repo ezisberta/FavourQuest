@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import {
   Text,
   ImageBackground,
@@ -11,6 +11,7 @@ import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
 import { auth, db } from "../../firebase";
 import { UserContext, QuestContext } from "../../App";
+import { useFocusEffect } from "@react-navigation/native";
 
 function QuestLog({ navigation }) {
   const [username, setUsername] = useState("");
@@ -18,32 +19,34 @@ function QuestLog({ navigation }) {
   const { user } = useContext(UserContext);
   const { quest, setQuest } = useContext(QuestContext);
 
-  useEffect(() => {
-    db.collection("Quests")
-      .where("questAcceptedBy", "==", user)
-      .where("questCompleted", "==", false)
-      .get()
-      .then((querySnapshot) => {
-        console.log("QuestLog - Line 26");
-        setMyQuests(
-          querySnapshot.docs.map((doc) => {
-            return (
-              <Pressable
-                onPress={() => {
-                  setQuest(doc.id);
-                  navigation.navigate("Quest");
-                }}
-              >
-                <Text key={doc.id}>{doc.data().title}</Text>
-              </Pressable>
-            );
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  useFocusEffect (
+    useCallback(() => {
+      db.collection("Quests")
+        .where("questAcceptedBy", "==", user)
+        .where("questCompleted", "==", false)
+        .get()
+        .then((querySnapshot) => {
+          console.log("QuestLog - Line 26");
+          setMyQuests(
+            querySnapshot.docs.map((doc) => {
+              return (
+                <Pressable
+                  onPress={() => {
+                    setQuest(doc.id);
+                    navigation.navigate("Quest");
+                  }}
+                >
+                  <Text key={doc.id}>{doc.data().title}</Text>
+                </Pressable>
+              );
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, [])
+  );
 
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
