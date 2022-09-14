@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 
@@ -27,39 +28,42 @@ function EditDetails({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-          style={styles.BackButtonBorder}
-        >
-          <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
-        <Text style={styles.DetailsText}>Edit Details</Text>
-      </View>
-      <View style={styles.ProfileOuterCard}>
-        <Text style={styles.ProfileCard}>Change Username</Text>
-        <TextInput style={styles.TextInput} placeholder="username"></TextInput>
-        <Text style={styles.ProfileCard}>Change Password</Text>
-        <TextInput style={styles.TextInput} placeholder="password"></TextInput>
-        <Text style={styles.ProfileCard}>Change Avatar</Text>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="avatar URL"
-        ></TextInput>
-      </View>
-      <View style={styles.Edit}>
-        <Text style={styles.EditText}>Edit Details</Text>
-      </View>
-      <View style={styles.Submit}>
-        <Text
-          style={styles.SubmitText}
-          onPress={() => navigation.navigate("Quest")}
-        >
-          Submit
-        </Text>
-      </View>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+            style={styles.BackButtonBorder}
+          >
+            <Text style={styles.BackArrow}>⇤</Text>
+          </Pressable>
+          <Text style={styles.DetailsText}>Edit Details</Text>
+        </View>
+        <View style={styles.ProfileOuterCard}>
+          <Text style={styles.ProfileCard}>Change Username</Text>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="username"
+          ></TextInput>
+          <Text style={styles.ProfileCard}>Change Password</Text>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="password"
+          ></TextInput>
+        </View>
+        <View style={styles.Edit}>
+          <Text style={styles.EditText}>Edit Details</Text>
+        </View>
+        <View style={styles.Submit}>
+          <Text
+            style={styles.SubmitText}
+            onPress={() => navigation.navigate("Quest")}
+          >
+            Submit
+          </Text>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
   },
   ProfileOuterCard: {
     margin: 25,
-    height: "60%",
+    height: "50%",
     backgroundColor: colors.secondary,
   },
   ProfileCard: {

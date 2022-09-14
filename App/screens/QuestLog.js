@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -100,7 +101,9 @@ function QuestLog({ navigation }) {
                   navigation.navigate("Quest");
                 }}
               >
-                <Text key={doc.id}>{doc.data().title}</Text>
+                <Text style={styles.QuestText} key={doc.id}>
+                  {doc.data().title}
+                </Text>
               </Pressable>
             );
           })
@@ -144,34 +147,42 @@ function QuestLog({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Map");
-            }}
-            style={styles.BackButtonBorder}
-          >
-            <Text style={styles.BackArrow}>⇤</Text>
-          </Pressable>
-          <Text style={styles.QuestLog}>Quest Log</Text>
-        </View>
-        <View style={styles.QuestCard}>
-          <Text style={styles.QuestType}>Your Quests:</Text>
-          {myQuests}
+      <SafeAreaView style={styles.container}>
+        <View style={{ flex: 10 }}>
+          <View style={styles.header}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Map");
+              }}
+              style={styles.BackButtonBorder}
+            >
+              <Text style={styles.BackArrow}>⇤</Text>
+            </Pressable>
+            <Text style={styles.QuestLog}>Quest Log</Text>
+          </View>
+          <View style={styles.QuestCard}>
+            <Text style={styles.QuestType}>Your Quests:</Text>
+            {myQuests}
+          </View>
         </View>
         <View style={styles.Menu}>
-          <Text onPress={handleAccepted} style={styles.NavButton}>
-            Accepted
-          </Text>
-          <Text onPress={handleCreated} style={styles.NavButton}>
-            Created
-          </Text>
-          <Text onPress={handleCompleted} style={styles.NavButton}>
-            Completed
-          </Text>
+          <View style={styles.NavButtonBorder}>
+            <Text onPress={handleAccepted} style={styles.NavButton}>
+              Accepted
+            </Text>
+          </View>
+          <View style={styles.NavButtonBorder}>
+            <Text onPress={handleCreated} style={styles.NavButton}>
+              Created
+            </Text>
+          </View>
+          <View style={styles.NavButtonBorder}>
+            <Text onPress={handleCompleted} style={styles.NavButton}>
+              Completed
+            </Text>
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -180,7 +191,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Menu: {
-    marginTop: "159%",
+    flex: 1,
+    marginTop: "160%",
     position: "absolute",
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -188,8 +200,18 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: colors.primary,
   },
+  NavButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 95,
+    height: 40,
+    bottom: 10,
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
   NavButton: {
-    marginTop: 20,
+    marginTop: 10,
+    marginLeft: 10,
     fontSize: 15,
     fontFamily: "Minecraft-Regular",
   },
@@ -200,17 +222,17 @@ const styles = StyleSheet.create({
   },
   QuestCard: {
     position: "absolute",
-    marginTop: 150,
+    marginTop: 120,
     margin: 25,
     width: "85%",
-    height: "60%",
+    height: "65%",
     backgroundColor: colors.secondary,
   },
   QuestType: {
-    margin: 25,
+    marginLeft: "25%",
     fontSize: "20",
     marginTop: 10,
-    fontFamily: "Minecraft-Regular",
+    fontFamily: "Minecraft-Bold",
   },
 
   Edit: {
@@ -243,7 +265,7 @@ const styles = StyleSheet.create({
     fontFamily: "Minecraft-Regular",
   },
   QuestLog: {
-    marginTop: 60,
+    marginTop: 20,
     marginLeft: -10,
     textShadowColor: colors.black,
     textShadowRadius: "10",
@@ -266,6 +288,11 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
+  },
+  QuestText: {
+    fontSize: 20,
+    fontFamily: "Minecraft-Regular",
+    margin: 30,
   },
 });
 

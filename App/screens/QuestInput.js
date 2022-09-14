@@ -70,78 +70,113 @@ export default function QuestInput({ navigation }) {
       style={styles.background}
       source={require("../assets/images/Pixel1.png")}
     >
-      <SafeAreaView>
-        <Image
-          style={styles.scroll}
-          source={require("../assets/images/scroll.jpg")}
-        ></Image>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Map");
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 10 }}>
+          <View>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Map");
+              }}
+              style={styles.BackButtonBorder}
+            >
+              <Text style={styles.BackArrow}>⇤</Text>
+            </Pressable>
+          </View>
+          <Image
+            style={styles.scroll}
+            source={require("../assets/images/scroll.jpg")}
+          ></Image>
+
+          <Text style={styles.QuestHeader}>Quest:</Text>
+          <TextInput
+            maxLength={50}
+            placeholder="Title"
+            style={styles.QuestText}
+            onChangeText={(text) => {
+              setTitle(text);
             }}
-            style={styles.BackButtonBorder}
-          >
-            <Text style={styles.BackArrow}>⇤</Text>
+          />
+
+          <GooglePlacesAutocomplete
+            placeholder="Where will it be?"
+            fetchDetails={true}
+            types={["(regions)"]}
+            onPress={(data, details = null) =>
+              setLocation(details.geometry.location)
+            }
+            textInputProps={{
+              errorStyle: { color: "red" },
+            }}
+            GooglePlacesSearchQuery={{ rankby: "distance" }}
+            query={{
+              key: googleKey,
+              language: "en",
+              components: "country:uk",
+              radius: 3000,
+            }}
+            styles={{ container: { ...styles.searchContainer } }}
+          />
+
+          <TextInput
+            maxLength={250}
+            placeholder="Description"
+            style={styles.QuestDescription}
+            onChangeText={(text) => {
+              setDescription(text);
+            }}
+          />
+          <TextInput
+            maxLength={2}
+            placeholder="Hour"
+            style={styles.QuestHour}
+            onChangeText={(text) => {
+              setHour(text);
+            }}
+          />
+          <TextInput
+            maxLength={2}
+            placeholder="Minute"
+            style={styles.QuestMinute}
+            onChangeText={(text) => {
+              setMinute(text);
+            }}
+          />
+          <Pressable onPress={handleSubmit} style={styles.Submit}>
+            <Text style={styles.SubmitText}>Submit</Text>
           </Pressable>
         </View>
-        <Text style={styles.QuestHeader}>Quest:</Text>
-        <TextInput
-          maxLength={50}
-          placeholder="Title"
-          style={styles.QuestText}
-          onChangeText={(text) => {
-            setTitle(text);
-          }}
-        />
-
-        <GooglePlacesAutocomplete
-          placeholder="Where will it be?"
-          fetchDetails={true}
-          types={["(regions)"]}
-          onPress={(data, details = null) =>
-            setLocation(details.geometry.location)
-          }
-          textInputProps={{
-            errorStyle: { color: "red" },
-          }}
-          GooglePlacesSearchQuery={{ rankby: "distance" }}
-          query={{
-            key: googleKey,
-            language: "en",
-            components: "country:uk",
-            radius: 3000,
-          }}
-          styles={{ container: { ...styles.searchContainer } }}
-        />
-
-        <TextInput
-          maxLength={250}
-          placeholder="Description"
-          style={styles.QuestDescription}
-          onChangeText={(text) => {
-            setDescription(text);
-          }}
-        />
-        <TextInput
-          maxLength={2}
-          placeholder="Hour"
-          style={styles.QuestHour}
-          onChangeText={(text) => {
-            setHour(text);
-          }}
-        />
-        <TextInput
-          maxLength={2}
-          placeholder="Minute"
-          style={styles.QuestMinute}
-          onChangeText={(text) => {
-            setMinute(text);
-          }}
-        />
-        <Pressable onPress={handleSubmit} style={styles.Submit}>
-          <Text style={styles.SubmitText}>Submit</Text>
-        </Pressable>
+        <View style={styles.Menu}>
+          <View style={styles.NavButtonBorder}>
+            <Text
+              onPress={() => {
+                navigation.navigate("Profile");
+              }}
+              style={styles.NavButton}
+            >
+              Profile
+            </Text>
+          </View>
+          <View style={styles.NavButtonBorder}>
+            <Text
+              onPress={() => {
+                navigation.navigate("Quest Log");
+              }}
+              style={styles.NavButton}
+            >
+              Quest Log
+            </Text>
+          </View>
+          <View style={styles.NavButtonBorder}>
+            <Text
+              onPress={() => {
+                navigation.navigate("Create Quest");
+              }}
+              style={styles.NavButton}
+            >
+              Create Quest
+            </Text>
+          </View>
+        </View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -153,7 +188,7 @@ const styles = StyleSheet.create({
     width: "70%",
     zIndex: 1,
     left: 60,
-    top: 160,
+    top: 180,
   },
   background: {
     flex: 1,
@@ -164,7 +199,7 @@ const styles = StyleSheet.create({
   QuestHeader: {
     position: "absolute",
     left: 125,
-    top: 100,
+    top: 120,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -176,7 +211,7 @@ const styles = StyleSheet.create({
   QuestText: {
     position: "absolute",
     left: 60,
-    top: 220,
+    top: 240,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -194,7 +229,7 @@ const styles = StyleSheet.create({
   QuestDescription: {
     position: "absolute",
     left: 60,
-    top: 260,
+    top: 280,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -206,7 +241,7 @@ const styles = StyleSheet.create({
   QuestHour: {
     position: "absolute",
     left: 60,
-    top: 310,
+    top: 330,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -218,7 +253,7 @@ const styles = StyleSheet.create({
   QuestMinute: {
     position: "absolute",
     left: 120,
-    top: 310,
+    top: 330,
     fontFamily: "Minecraft-Regular",
     textShadowColor: "black",
     textShadowRadius: "10",
@@ -230,7 +265,7 @@ const styles = StyleSheet.create({
 
   Submit: {
     marginLeft: 140,
-    marginTop: 370,
+    marginTop: 390,
     position: "absolute",
     width: 70,
     height: 40,
@@ -250,15 +285,32 @@ const styles = StyleSheet.create({
     margin: -6,
   },
   BackButtonBorder: {
-    margin: 25,
+    marginLeft: 25,
     width: 40,
     height: 40,
     backgroundColor: colors.primary,
   },
-  header: {
+  Menu: {
+    flex: 1,
     flexDirection: "row",
-    position: "absolute",
-    marginTop: 80,
-    marginLeft: 20,
+    justifyContent: "space-evenly",
+    width: "100%",
+    height: 70,
+    backgroundColor: colors.primary,
+  },
+  NavButton: {
+    marginTop: 10,
+    marginLeft: 10,
+    fontSize: 13,
+    fontFamily: "Minecraft-Regular",
+  },
+  NavButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 100,
+    height: 40,
+    bottom: 10,
+    borderRadius: "5%",
+    shadowOpacity: "5%",
   },
 });
