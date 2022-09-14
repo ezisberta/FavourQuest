@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext, useCallback } from "react";
 import {
   Text,
   ImageBackground,
@@ -10,41 +10,44 @@ import {
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
-import { auth, db } from "../../firebase";
+import {  db } from "../../firebase";
 import { UserContext, QuestContext } from "../../App";
+import { useFocusEffect } from "@react-navigation/native";
 
 function QuestLog({ navigation }) {
-  const [username, setUsername] = useState("");
   const [myQuests, setMyQuests] = useState([]);
   const { user } = useContext(UserContext);
-  const { quest, setQuest } = useContext(QuestContext);
+  const { setQuest } = useContext(QuestContext);
 
-  useEffect(() => {
-    db.collection("Quests")
-      .where("questAcceptedBy", "==", user)
-      .where("questCompleted", "==", false)
-      .get()
-      .then((querySnapshot) => {
-        console.log("QuestLog - Line 26");
-        setMyQuests(
-          querySnapshot.docs.map((doc) => {
-            return (
-              <Pressable
-                onPress={() => {
-                  setQuest(doc.id);
-                  navigation.navigate("Quest");
-                }}
-              >
-                <Text key={doc.id}>{doc.data().title}</Text>
-              </Pressable>
-            );
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  useFocusEffect (
+    useCallback(() => {
+      db.collection("Quests")
+        .where("questAcceptedBy", "==", user)
+        .where("questCompleted", "==", false)
+        .get()
+        .then((querySnapshot) => {
+          setMyQuests(
+            querySnapshot.docs.map((doc) => {
+              return (
+                <Pressable
+                  key={doc.id}
+                  onPress={() => {
+                    setQuest(doc.id);
+                    navigation.navigate("Quest");
+                  }}
+                >
+                  <Text>{doc.data().title}</Text>
+                </Pressable>
+              );
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          throw err;
+        });
+    }, [])
+  );
 
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
@@ -57,15 +60,12 @@ function QuestLog({ navigation }) {
     return <LoadingPage />;
   }
 
-  console.log(myQuests, "<<<<MY QUESTS");
-
   const handleAccepted = () => {
     db.collection("Quests")
       .where("questAcceptedBy", "==", user)
       .where("questCompleted", "==", false)
       .get()
       .then((querySnapshot) => {
-        console.log("QuestLog - Line 55");
         setMyQuests(
           querySnapshot.docs.map((doc) => {
             return (
@@ -83,6 +83,7 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -91,7 +92,6 @@ function QuestLog({ navigation }) {
       .where("uid", "==", user)
       .get()
       .then((querySnapshot) => {
-        console.log("QuestLog - Line 72");
         setMyQuests(
           querySnapshot.docs.map((doc) => {
             return (
@@ -111,6 +111,7 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -120,7 +121,6 @@ function QuestLog({ navigation }) {
       .where("questCompleted", "==", true)
       .get()
       .then((querySnapshot) => {
-        console.log("QuestLog - Line 72");
         setMyQuests(
           querySnapshot.docs.map((doc) => {
             return (
@@ -138,6 +138,7 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 

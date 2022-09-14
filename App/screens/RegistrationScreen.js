@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   Text,
   TextInput,
@@ -11,6 +11,7 @@ import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
 import { auth, db } from "../../firebase";
+import { UserContext } from "../../App";
 
 function RegistrationScreen({ navigation }) {
   const [firstname, setFirstname] = useState("");
@@ -18,6 +19,7 @@ function RegistrationScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setUser } = useContext(UserContext);
 
   const [firstNameValid, setFirstNameValid] = useState("");
   const [surnameValid, setSurnameValid] = useState("");
@@ -52,9 +54,7 @@ function RegistrationScreen({ navigation }) {
   const handleBlurUsername = () => {
     if (!/^\w+$/.test(username)) {
       setUsernameValid("invalidFormat");
-      console.log("invalidFormat");
     } else {
-      console.log("valid");
       db.collection("users")
         .get()
         .then((snapshot) => {
@@ -66,7 +66,10 @@ function RegistrationScreen({ navigation }) {
           } else {
             setUsernameValid("valid");
           }
-        });
+        }).catch((err) => {
+          console.log(err);
+          throw err;
+        })
     }
   };
 
@@ -81,7 +84,10 @@ function RegistrationScreen({ navigation }) {
           } else {
             setEmailValid("valid");
           }
-        });
+        }).catch((err) => {
+          console.log(err);
+          throw err;
+        })
       }
     }
   };
@@ -108,10 +114,11 @@ function RegistrationScreen({ navigation }) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((result) => {
-          console.log(result);
+          setUser(result.user.uid);
         })
         .catch((err) => {
           console.log(err);
+          throw err;
         });
       auth.onAuthStateChanged((user) => {
         if (user) {
@@ -121,10 +128,9 @@ function RegistrationScreen({ navigation }) {
             email,
             firstname,
             surname,
-            quests: [],
           });
         }
-      });
+      })
       navigation.navigate("Profile");
     } else {
       alert("All fields must be correct before proceding");
@@ -309,8 +315,3 @@ const styles = StyleSheet.create({
 });
 
 export default RegistrationScreen;
-
-// refactor states to strings and change if statements (render, invalid, valid)
-// sort username if already exists
-// styling the alerts
-// submit button functionality

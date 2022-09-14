@@ -25,7 +25,10 @@ function ProfileScreen({ navigation }) {
           .then((snapshot) => {
             const data = snapshot.data();
             setUsername(data.username);
-          });
+          }).catch((err) => {
+            console.log(err);
+            throw err;
+          })
       }
     });
   }, []);
@@ -44,7 +47,10 @@ function ProfileScreen({ navigation }) {
   const handleSignOut = () => {
     auth.signOut().then(() => {
       navigation.navigate("Welcome");
-    });
+    }).catch((err) => {
+      console.log(err);
+      throw err;
+    })
   };
 
   return (
@@ -52,6 +58,7 @@ function ProfileScreen({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
+
       <SafeAreaView>
         <View style={styles.header}>
           <Pressable
@@ -82,6 +89,7 @@ function ProfileScreen({ navigation }) {
           </View>
         </View>
       </SafeAreaView>
+
     </ImageBackground>
   );
 }

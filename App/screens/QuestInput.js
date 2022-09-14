@@ -35,7 +35,6 @@ export default function QuestInput({ navigation }) {
   const [hour, setHour] = useState(12);
   const [minute, setMinute] = useState(12);
   const [location, setLocation] = useState({});
-  // const [markers, setMarkers] = useState([]);
 
   if (!fontsLoaded) {
     return <LoadingPage />;
@@ -56,15 +55,12 @@ export default function QuestInput({ navigation }) {
           questAcceptedBy: "",
         })
         .then((result) => {
-          console.log(result.id);
-          // const questKey =
-          //   event.target._internalFiberInstanceHandleDEV._debugOwner.key;
-          // console.log(typeof questKey);
           setQuest(result.id);
           navigation.navigate("Quest");
         })
         .catch((err) => {
           console.log(err);
+          throw err;
         });
     });
   };

@@ -4,10 +4,9 @@ import {
   Text,
   View,
   SafeAreaView,
-  Dimensions,
   Image,
 } from "react-native";
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useContext, useCallback } from "react";
 import colors from "../config/colors";
 import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
@@ -43,9 +42,8 @@ export default function Map({ navigation }) {
           }
         } catch (error) {
           console.log(error);
+          throw error;
         }
-
-        console.log("Map line 46");
 
         let location = await Location.getCurrentPositionAsync({});
         setPinPoint({
@@ -64,10 +62,8 @@ export default function Map({ navigation }) {
         .where("questCompleted", "==", false)
         .get()
         .then((querySnapshot) => {
-          console.log("Maps - Line 63");
           setMarkers(
             querySnapshot.docs.map((doc) => {
-              console.log(doc.data());
               return (
                 <Marker
                   key={doc.id}
@@ -91,14 +87,16 @@ export default function Map({ navigation }) {
               );
             })
           );
-        });
+        }).catch((err) => {
+          console.log(err);
+          throw err;
+        })
     }, [])
   );
 
   const handleQuestMarkerPress = (event) => {
     const questKey =
       event.target._internalFiberInstanceHandleDEV._debugOwner.key;
-    console.log(questKey, "<<<<<EVENT");
     setQuest(questKey);
     navigation.navigate("Quest");
   };
@@ -174,8 +172,6 @@ const styles = StyleSheet.create({
   },
   Map: {
     flex: 8,
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height,
   },
   Marker: {},
   MapText: {
