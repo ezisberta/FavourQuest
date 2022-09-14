@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -16,11 +16,14 @@ import colors from "../config/colors";
 import { auth, db } from "../../firebase";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { googleKey } from "../secretkey/secretKey";
+import { QuestContext } from "../../App";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function QuestInput({ navigation }) {
+  const { quest, setQuest } = useContext(QuestContext);
+
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
     "Minecraft-Regular": require("../assets/fonts/minecraft-font/Minecraft-Regular.otf"),
@@ -38,7 +41,7 @@ export default function QuestInput({ navigation }) {
     return <LoadingPage />;
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     auth.onAuthStateChanged(({ uid }) => {
       db.collection("Quests")
         .add({
@@ -49,25 +52,10 @@ export default function QuestInput({ navigation }) {
           minute,
           location,
         })
-        // .then(() => {
-        //   db.collection("Quests")
-        //     .get()
-        //     .then((querySnapshot) => {
-        //       setMarkers(
-        //         querySnapshot.docs.map((doc) => {
-        //           return (
-        //             <Marker
-        //               coordinate={{
-        //                 latitude: doc.data().location.lat,
-        //                 longitude: doc.data().location.lng,
-        //               }}
-        //             ></Marker>
-        //           );
-        //         })
-        //       );
-        //     });
-        // })
         .then(() => {
+          const questKey =
+            event.target._internalFiberInstanceHandleDEV._debugOwner.key;
+          setQuest(questKey);
           navigation.navigate("Quest");
         })
         .catch((err) => {
