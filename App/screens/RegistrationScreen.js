@@ -66,10 +66,10 @@ function RegistrationScreen({ navigation }) {
           } else {
             setUsernameValid("valid");
           }
-        }).catch((err) => {
-          console.log(err);
-          throw err;
         })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -78,16 +78,18 @@ function RegistrationScreen({ navigation }) {
       setEmailValid("invalidFormat");
     } else {
       {
-        auth.fetchSignInMethodsForEmail(email).then((result) => {
-          if (result.length > 0) {
-            setEmailValid("takenEmail");
-          } else {
-            setEmailValid("valid");
-          }
-        }).catch((err) => {
-          console.log(err);
-          throw err;
-        })
+        auth
+          .fetchSignInMethodsForEmail(email)
+          .then((result) => {
+            if (result.length > 0) {
+              setEmailValid("takenEmail");
+            } else {
+              setEmailValid("valid");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   };
@@ -118,7 +120,6 @@ function RegistrationScreen({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
-          throw err;
         });
       auth.onAuthStateChanged((user) => {
         if (user) {
@@ -130,7 +131,7 @@ function RegistrationScreen({ navigation }) {
             surname,
           });
         }
-      })
+      });
       navigation.navigate("Profile");
     } else {
       alert("All fields must be correct before proceding");

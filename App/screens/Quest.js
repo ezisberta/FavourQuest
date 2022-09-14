@@ -42,7 +42,6 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   }, []);
 
@@ -58,7 +57,6 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
@@ -74,7 +72,6 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
@@ -93,7 +90,6 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
@@ -106,9 +102,8 @@ export default function Quest({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
-  }
+  };
 
   return (
     <ImageBackground

@@ -60,7 +60,6 @@ export default function QuestInput({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
-          throw err;
         });
     });
   };

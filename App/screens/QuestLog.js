@@ -44,7 +44,6 @@ function QuestLog({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
-          throw err;
         });
     }, [])
   );
@@ -86,7 +85,6 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
@@ -115,7 +113,6 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
@@ -145,7 +142,6 @@ function QuestLog({ navigation }) {
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
