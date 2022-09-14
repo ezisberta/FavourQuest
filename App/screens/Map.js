@@ -125,30 +125,36 @@ export default function Map({ navigation }) {
         <Text style={styles.MapText}></Text>
       </Mapview>
       <View style={styles.Menu}>
-        <Text
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-          style={styles.NavButton}
-        >
-          Profile
-        </Text>
-        <Text
-          onPress={() => {
-            navigation.navigate("Quest Log");
-          }}
-          style={styles.NavButton}
-        >
-          Quest Log
-        </Text>
-        <Text
-          onPress={() => {
-            navigation.navigate("Create Quest");
-          }}
-          style={styles.NavButton}
-        >
-          Create Quest
-        </Text>
+        <View style={styles.NavButtonBorder}>
+          <Text
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+            style={styles.NavButton}
+          >
+            Profile
+          </Text>
+        </View>
+        <View style={styles.NavButtonBorder}>
+          <Text
+            onPress={() => {
+              navigation.navigate("Quest Log");
+            }}
+            style={styles.NavButton}
+          >
+            Quest Log
+          </Text>
+        </View>
+        <View style={styles.NavButtonBorder}>
+          <Text
+            onPress={() => {
+              navigation.navigate("Create Quest");
+            }}
+            style={styles.NavButton}
+          >
+            Create Quest
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -200,8 +206,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   NavButton: {
-    marginTop: 20,
-    fontSize: 15,
+    marginTop: 10,
+    marginLeft: 10,
+    fontSize: 13,
     fontFamily: "Minecraft-Regular",
+  },
+  NavButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 100,
+    height: 40,
+    bottom: 10,
+    borderRadius: "5%",
+    shadowOpacity: "5%",
   },
 });

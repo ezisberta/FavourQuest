@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -22,7 +23,6 @@ function ProfileScreen({ navigation }) {
           .doc(uid)
           .get()
           .then((snapshot) => {
-            //  console.log(snapshot.data());
             const data = snapshot.data();
             setUsername(data.username);
           });
@@ -52,57 +52,68 @@ function ProfileScreen({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.BackButtonBorder}
-        >
-          <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
-        {/* <Image source={require("../assets/images/SkeleAva.png")}  */}
-        <Text style={styles.ProfileText}>Profile</Text>
-      </View>
-      <View style={styles.ProfileOuterCard}>
-        <Text style={styles.ProfileCard}>Username</Text>
-        <Text style={styles.ProfileCardContent}>{`${username}`}</Text>
-      </View>
-      <View style={styles.Edit}>
-        <Text
-          style={styles.EditText}
-          onPress={() => navigation.navigate("Edit Details")}
-        >
-          Edit Details
-        </Text>
-        <Text style={styles.EditText} onPress={handleSignOut}>
-          Sign Out
-        </Text>
-      </View>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Map");
+            }}
+            style={styles.BackButtonBorder}
+          >
+            <Text style={styles.BackArrow}>⇤</Text>
+          </Pressable>
+          <Text style={styles.ProfileText}>Profile</Text>
+        </View>
+        <View style={styles.ProfileOuterCard}>
+          <Text style={styles.ProfileCard}>Username</Text>
+          <Text style={styles.ProfileCardContent}>{`${username}`}</Text>
+        </View>
+        <View style={styles.Edit}>
+          <Text
+            style={styles.EditText}
+            onPress={() => navigation.navigate("Edit Details")}
+          >
+            Edit Details
+          </Text>
+          <View style={styles.signOut}>
+            <Text style={styles.EditText} onPress={handleSignOut}>
+              Sign Out
+            </Text>
+          </View>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
   ProfileCardContent: {
-    fontSize: "20",
+    fontSize: "30",
     fontFamily: "Minecraft-Bold",
     color: colors.primary,
   },
   ProfileOuterCard: {
     margin: 25,
-    height: 170,
+    height: 100,
     paddingLeft: 25,
     backgroundColor: colors.secondary,
   },
   ProfileCard: {
     marginTop: 10,
     fontFamily: "Minecraft-Regular",
+    fontSize: "20",
   },
 
   Edit: {
     height: 80,
     backgroundColor: colors.primary,
     margin: 25,
+    width: "85%",
+  },
+  signOut: {
+    height: 80,
+    backgroundColor: colors.primary,
+    marginTop: 50,
+    width: "100%",
   },
   EditText: {
     paddingTop: 18,
