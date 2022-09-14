@@ -67,10 +67,6 @@ function ProfileScreen({ navigation }) {
       <View style={styles.ProfileOuterCard}>
         <Text style={styles.ProfileCard}>Username</Text>
         <Text style={styles.ProfileCardContent}>{`${username}`}</Text>
-        <Text style={styles.ProfileCard}>Current Level</Text>
-        <Text style={styles.ProfileCardContent}>4</Text>
-        <Text style={styles.ProfileCard}>Exp needed to next level</Text>
-        <Text style={styles.ProfileCardContent}>150xp</Text>
       </View>
       <View style={styles.Edit}>
         <Text

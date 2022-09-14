@@ -29,9 +29,9 @@ export default function App() {
             <Stack.Screen name="Quest" component={Quest} />
             <Stack.Screen name="Create Quest" component={QuestInput} />
             <Stack.Screen name="Quest Log" component={QuestLog} />
-            <Stack.Screen name="Map" component={Map} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Edit Details" component={EditDetails} />
+            <Stack.Screen name="Map" component={Map} />
           </Stack.Navigator>
         </NavigationContainer>
       </QuestContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -7,18 +7,20 @@ import {
   Image,
   SafeAreaView,
   Pressable,
+  View,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { db } from "../../firebase";
-import { QuestContext } from "../../App";
+import { QuestContext, UserContext } from "../../App";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Quest({ navigation }) {
   const [questArr, setQuestArr] = useState([]);
+  const { user } = useContext(UserContext);
   const { quest } = useContext(QuestContext);
 
   const [fontsLoaded] = useFonts({
@@ -28,37 +30,72 @@ export default function Quest({ navigation }) {
     "Minecraft-BoldItalic": require("../assets/fonts/minecraft-font/Minecraft-BoldItalic.otf"),
   });
 
+  const questRef = db.collection("Quests");
+
+  useEffect(() => {
+    questRef
+      .doc(quest)
+      .get()
+      .then((querySnapshot) => {
+        console.log("Quest line 42");
+        const questData = querySnapshot.data();
+        setQuestArr(questData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const acceptQuest = () => {
+    questRef
+      .doc(quest)
+      .update({
+        questAccepted: true,
+        questAcceptedBy: user,
+      })
+      .then(() => {
+        console.log("Quest line 59 (acceptQuest)");
+        navigation.navigate("Map");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
 
-  const questRef = db.collection("Quests");
-
-  questRef
-    .doc(quest)
-    // .where("uid", "==", "744eXBn3kBdnkd8npZiMHTQsxP13")
-    .get()
-    .then((querySnapshot) => {
-      const questData = querySnapshot.data();
-      setQuestArr(questData);
-    })
-    .catch((error) => {
-      console.log("Error getting documents: ", error);
-    });
+  const completeQuest = () => {
+    questRef
+      .doc(quest)
+      .update({
+        questCompleted: true,
+      })
+      .then(() => {
+        console.log("Quest line 73");
+        navigation.navigate("Map");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ImageBackground
       style={styles.background}
       source={require("../assets/images/Pixel1.png")}
     >
-      <Pressable
-        onPress={() => {
-          navigation.navigate("Map");
-        }}
-        style={styles.BackButtonBorder}
-      >
-        <Text style={styles.BackArrow}>⇤</Text>
-      </Pressable>
+      <View>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Map");
+          }}
+          style={styles.BackButtonBorder}
+        >
+          <Text style={styles.BackArrow}>⇤</Text>
+        </Pressable>
+      </View>
       <SafeAreaView>
         <Image
           style={styles.scroll}
@@ -66,34 +103,68 @@ export default function Quest({ navigation }) {
         ></Image>
         <Text style={styles.QuestHeader}>Quest:</Text>
         <Text style={styles.QuestText}>{questArr.title}</Text>
-
         <Text style={styles.QuestDescription}>{questArr.description}</Text>
-
         <Text style={styles.QuestTime}>
           Time: {questArr.hour}:{questArr.minute}
         </Text>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.AcceptButtonBorder}
-        >
-          <Text style={styles.Accept}>Accept</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.DeclineButtonBorder}
-        >
-          <Text style={styles.Decline}>Decline</Text>
-        </Pressable>
+        {user === questArr.uid ? (
+          <View>
+            <Pressable
+              onPress={() => {
+                completeQuest();
+              }}
+              style={styles.CompleteButtonBorder}
+            >
+              <Text style={styles.Complete}>Complete</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                cancelQuest();
+              }}
+              style={styles.CancelButtonBorder}
+            >
+              <Text style={styles.Cancel}>Cancel</Text>
+            </Pressable>
+          </View>
+        ) : questArr.questAcceptedBy === user &&
+          questArr.questCompleted === false ? (
+          <Pressable
+            onPress={() => {
+              abandonQuest();
+            }}
+            style={styles.AbandonButtonBorder}
+          >
+            <Text style={styles.Accept}>Abandon</Text>
+          </Pressable>
+        ) : questArr.questCompleted === false ? (
+          <Pressable
+            onPress={() => {
+              acceptQuest();
+            }}
+            style={styles.AcceptButtonBorder}
+          >
+            <Text style={styles.Accept}>Accept</Text>
+          </Pressable>
+        ) : (
+          <Text style={styles.QuestComplete}>Quest Complete</Text>
+        )}
       </SafeAreaView>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  QuestComplete: {
+    fontSize: "25",
+    position: "absolute",
+    fontFamily: "Minecraft-Bold",
+    color: colors.secondary,
+    margin: 25,
+    width: "100%",
+    height: 40,
+    left: "9%",
+    bottom: 100,
+  },
   BackArrow: {
     color: colors.white,
     fontSize: 40,
@@ -190,28 +261,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  DeclineButtonBorder: {
-    backgroundColor: colors.primary,
-    margin: 25,
-    width: 80,
-    height: 40,
-    right: 70,
-    bottom: 100,
-    position: "absolute",
-    borderRadius: "5%",
-    shadowOpacity: "5%",
-  },
-  Decline: {
-    position: "absolute",
-    color: "black",
-    right: 10,
-    bottom: 10,
-    fontFamily: "Minecraft-Regular",
-    textAlign: "center",
-    textShadowColor: colors.black,
-    textShadowRadius: "1",
-    fontSize: 18,
-  },
+
   Accept: {
     color: "black",
     position: "absolute",
@@ -228,7 +278,62 @@ const styles = StyleSheet.create({
     margin: 25,
     width: 80,
     height: 40,
-    left: 30,
+    left: "28%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  AbandonButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 95,
+    height: 40,
+    left: "26%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  Complete: {
+    color: "black",
+    position: "absolute",
+    left: 10,
+    bottom: 10,
+    fontFamily: "Minecraft-Regular",
+    textAlign: "center",
+    textShadowColor: colors.black,
+    textShadowRadius: "1",
+    fontSize: 18,
+  },
+  CompleteButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 100,
+    height: 40,
+    left: "10%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  Cancel: {
+    color: "black",
+    position: "absolute",
+    left: 10,
+    bottom: 10,
+    fontFamily: "Minecraft-Regular",
+    textAlign: "center",
+    textShadowColor: colors.black,
+    textShadowRadius: "1",
+    fontSize: 18,
+  },
+  CancelButtonBorder: {
+    backgroundColor: colors.primary,
+    margin: 25,
+    width: 80,
+    height: 40,
+    left: "45%",
     bottom: 100,
     position: "absolute",
     borderRadius: "5%",
