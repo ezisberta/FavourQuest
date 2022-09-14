@@ -61,11 +61,13 @@ export default function Map({ navigation }) {
       })();
       db.collection("Quests")
         .where("questAccepted", "==", false)
+        .where("questCompleted", "==", false)
         .get()
         .then((querySnapshot) => {
           console.log("Maps - Line 63");
           setMarkers(
             querySnapshot.docs.map((doc) => {
+              console.log(doc.data());
               return (
                 <Marker
                   key={doc.id}

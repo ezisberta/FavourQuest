@@ -46,10 +46,6 @@ function QuestLog({ navigation }) {
   }
 
   console.log(myQuests, "<<<<MY QUESTS");
-  // const questData = myQuests.map((doc) => {
-  //   console.log(doc.data().title);
-  //   return doc.data();
-  // });
 
   return (
     <ImageBackground

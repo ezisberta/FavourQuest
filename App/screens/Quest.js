@@ -66,6 +66,21 @@ export default function Quest({ navigation }) {
     return <LoadingPage />;
   }
 
+  const completeQuest = () => {
+    questRef
+      .doc(quest)
+      .update({
+        questCompleted: true,
+      })
+      .then(() => {
+        console.log("Quest line 73");
+        navigation.navigate("Map");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <ImageBackground
       style={styles.background}
@@ -86,23 +101,41 @@ export default function Quest({ navigation }) {
           style={styles.scroll}
           source={require("../assets/images/scroll.jpg")}
         ></Image>
-
         <Text style={styles.QuestHeader}>Quest:</Text>
         <Text style={styles.QuestText}>{questArr.title}</Text>
-
         <Text style={styles.QuestDescription}>{questArr.description}</Text>
-
         <Text style={styles.QuestTime}>
           Time: {questArr.hour}:{questArr.minute}
         </Text>
-        <Pressable
-          onPress={() => {
-            acceptQuest();
-          }}
-          style={styles.AcceptButtonBorder}
-        >
-          <Text style={styles.Accept}>Accept</Text>
-        </Pressable>
+        {user === questArr.uid ? (
+          <View>
+            <Pressable
+              onPress={() => {
+                completeQuest();
+              }}
+              style={styles.CompleteButtonBorder}
+            >
+              <Text style={styles.Complete}>Complete</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                cancelQuest();
+              }}
+              style={styles.CancelButtonBorder}
+            >
+              <Text style={styles.Cancel}>Cancel</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <Pressable
+            onPress={() => {
+              acceptQuest();
+            }}
+            style={styles.AcceptButtonBorder}
+          >
+            <Text style={styles.Accept}>Accept</Text>
+          </Pressable>
+        )}
       </SafeAreaView>
     </ImageBackground>
   );
@@ -223,6 +256,50 @@ const styles = StyleSheet.create({
     width: 80,
     height: 40,
     left: "28%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  Complete: {
+    color: "black",
+    position: "absolute",
+    left: 10,
+    bottom: 10,
+    fontFamily: "Minecraft-Regular",
+    textAlign: "center",
+    textShadowColor: colors.black,
+    textShadowRadius: "1",
+    fontSize: 18,
+  },
+  CompleteButtonBorder: {
+    backgroundColor: colors.secondary,
+    margin: 25,
+    width: 100,
+    height: 40,
+    left: "10%",
+    bottom: 100,
+    position: "absolute",
+    borderRadius: "5%",
+    shadowOpacity: "5%",
+  },
+  Cancel: {
+    color: "black",
+    position: "absolute",
+    left: 10,
+    bottom: 10,
+    fontFamily: "Minecraft-Regular",
+    textAlign: "center",
+    textShadowColor: colors.black,
+    textShadowRadius: "1",
+    fontSize: 18,
+  },
+  CancelButtonBorder: {
+    backgroundColor: colors.primary,
+    margin: 25,
+    width: 80,
+    height: 40,
+    left: "45%",
     bottom: 100,
     position: "absolute",
     borderRadius: "5%",
