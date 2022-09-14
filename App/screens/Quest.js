@@ -12,13 +12,14 @@ import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 import colors from "../config/colors";
 import { db } from "../../firebase";
-import { QuestContext } from "../../App";
+import { QuestContext, UserContext } from "../../App";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Quest({ navigation }) {
   const [questArr, setQuestArr] = useState([]);
+  const { user } = useContext(UserContext);
   const { quest } = useContext(QuestContext);
 
   const [fontsLoaded] = useFonts({
@@ -36,7 +37,6 @@ export default function Quest({ navigation }) {
 
   questRef
     .doc(quest)
-    // .where("uid", "==", "744eXBn3kBdnkd8npZiMHTQsxP13")
     .get()
     .then((querySnapshot) => {
       const questData = querySnapshot.data();
@@ -45,6 +45,21 @@ export default function Quest({ navigation }) {
     .catch((error) => {
       console.log("Error getting documents: ", error);
     });
+
+  const acceptQuest = () => {
+    questRef
+      .doc(quest)
+      .update({
+        questAccepted: true,
+        questAcceptedBy: user,
+      })
+      .then(() => {
+        navigation.navigate("Map");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ImageBackground
@@ -74,19 +89,11 @@ export default function Quest({ navigation }) {
         </Text>
         <Pressable
           onPress={() => {
-            navigation.navigate("Map");
+            acceptQuest();
           }}
           style={styles.AcceptButtonBorder}
         >
           <Text style={styles.Accept}>Accept</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Map");
-          }}
-          style={styles.DeclineButtonBorder}
-        >
-          <Text style={styles.Decline}>Decline</Text>
         </Pressable>
       </SafeAreaView>
     </ImageBackground>
@@ -190,28 +197,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  DeclineButtonBorder: {
-    backgroundColor: colors.primary,
-    margin: 25,
-    width: 80,
-    height: 40,
-    right: 70,
-    bottom: 100,
-    position: "absolute",
-    borderRadius: "5%",
-    shadowOpacity: "5%",
-  },
-  Decline: {
-    position: "absolute",
-    color: "black",
-    right: 10,
-    bottom: 10,
-    fontFamily: "Minecraft-Regular",
-    textAlign: "center",
-    textShadowColor: colors.black,
-    textShadowRadius: "1",
-    fontSize: 18,
-  },
+
   Accept: {
     color: "black",
     position: "absolute",
@@ -228,7 +214,7 @@ const styles = StyleSheet.create({
     margin: 25,
     width: 80,
     height: 40,
-    left: 30,
+    left: "28%",
     bottom: 100,
     position: "absolute",
     borderRadius: "5%",

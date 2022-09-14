@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Text,
   ImageBackground,
@@ -10,9 +10,29 @@ import { useFonts } from "expo-font";
 import colors from "../config/colors";
 import LoadingPage from "./LoadingPage";
 import { auth, db } from "../../firebase";
+import { UserContext } from "../../App";
 
 function QuestLog({ navigation }) {
   const [username, setUsername] = useState("");
+  const [myQuests, setMyQuests] = useState([]);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    db.collection("Quests")
+      .where("questAcceptedBy", "==", user)
+      .get()
+      .then((querySnapshot) => {
+        console.log(querySnapshot.docs[0].data().title, "<<<HERE IT IS");
+        setMyQuests(
+          querySnapshot.docs.map((doc) => {
+            return <Text key={doc.id}>{doc.title}</Text>;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [fontsLoaded] = useFonts({
     "Minecraft-Bold": require("../assets/fonts/minecraft-font/Minecraft-Bold.otf"),
@@ -24,6 +44,12 @@ function QuestLog({ navigation }) {
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
+
+  console.log(myQuests, "<<<<MY QUESTS");
+  // const questData = myQuests.map((doc) => {
+  //   console.log(doc.data().title);
+  //   return doc.data();
+  // });
 
   return (
     <ImageBackground
@@ -43,6 +69,7 @@ function QuestLog({ navigation }) {
       </View>
       <View style={styles.QuestCard}>
         <Text style={styles.QuestType}>Your Quests:</Text>
+        {/* {questData} */}
       </View>
     </ImageBackground>
   );

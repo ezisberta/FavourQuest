@@ -13,7 +13,6 @@ import Mapview, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { db } from "../../firebase";
 import { UserContext, QuestContext } from "../../App";
-import Quest from "./Quest";
 
 export default function Map({ navigation }) {
   const { user } = useContext(UserContext);
@@ -56,36 +55,38 @@ export default function Map({ navigation }) {
         longitudeDelta: 0.0421,
       });
     })();
-    db.collection("Quests")
-      .get()
-      .then((querySnapshot) => {
-        setMarkers(
-          querySnapshot.docs.map((doc) => {
-            return (
-              <Marker
-                key={doc.id}
-                pinColor={user === doc.data().uid ? "purple" : "blue"}
-                coordinate={{
-                  latitude: doc.data().location.lat,
-                  longitude: doc.data().location.lng,
-                }}
-                onPress={handleQuestMarkerPress}
-              >
-                <Image
-                  source={
-                    user === doc.data().uid
-                      ? require("../assets/images/userExclamationMark.png")
-                      : require("../assets/images/exclamationMark.png")
-                  }
-                  resizeMode="contain"
-                  style={{ width: 80, height: 80 }}
-                ></Image>
-              </Marker>
-            );
-          })
-        );
-      });
   }, []);
+  db.collection("Quests")
+    .where("questAccepted", "==", false)
+    .get()
+    .then((querySnapshot) => {
+      setMarkers(
+        querySnapshot.docs.map((doc) => {
+          console.log("LOOPINGGGSSSS");
+          return (
+            <Marker
+              key={doc.id}
+              pinColor={user === doc.data().uid ? "purple" : "blue"}
+              coordinate={{
+                latitude: doc.data().location.lat,
+                longitude: doc.data().location.lng,
+              }}
+              onPress={handleQuestMarkerPress}
+            >
+              <Image
+                source={
+                  user === doc.data().uid
+                    ? require("../assets/images/userExclamationMark.png")
+                    : require("../assets/images/exclamationMark.png")
+                }
+                resizeMode="contain"
+                style={{ width: 80, height: 80 }}
+              ></Image>
+            </Marker>
+          );
+        })
+      );
+    });
 
   const handleQuestMarkerPress = (event) => {
     const questKey =

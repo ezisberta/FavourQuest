@@ -41,7 +41,7 @@ export default function QuestInput({ navigation }) {
     return <LoadingPage />;
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = () => {
     auth.onAuthStateChanged(({ uid }) => {
       db.collection("Quests")
         .add({
@@ -51,11 +51,16 @@ export default function QuestInput({ navigation }) {
           hour,
           minute,
           location,
+          questCompleted: false,
+          questAccepted: false,
+          questAcceptedBy: "",
         })
-        .then(() => {
-          const questKey =
-            event.target._internalFiberInstanceHandleDEV._debugOwner.key;
-          setQuest(questKey);
+        .then((result) => {
+          console.log(result.id);
+          // const questKey =
+          //   event.target._internalFiberInstanceHandleDEV._debugOwner.key;
+          // console.log(typeof questKey);
+          setQuest(result.id);
           navigation.navigate("Quest");
         })
         .catch((err) => {
