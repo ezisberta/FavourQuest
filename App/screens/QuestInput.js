@@ -9,6 +9,7 @@ import {
   Pressable,
   TextInput,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
@@ -72,14 +73,14 @@ export default function QuestInput({ navigation }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 10 }}>
           <View>
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Map");
               }}
               style={styles.BackButtonBorder}
             >
               <Text style={styles.BackArrow}>⇤</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <Image
             style={styles.scroll}
@@ -140,9 +141,9 @@ export default function QuestInput({ navigation }) {
               setMinute(text);
             }}
           />
-          <Pressable onPress={handleSubmit} style={styles.Submit}>
+          <TouchableOpacity onPress={handleSubmit} style={styles.Submit}>
             <Text style={styles.SubmitText}>Submit</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <View style={styles.Menu}>
           <View style={styles.NavButtonBorder}>

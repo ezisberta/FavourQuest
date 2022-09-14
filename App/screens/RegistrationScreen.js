@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -144,14 +145,14 @@ function RegistrationScreen({ navigation }) {
       style={styles.background}
     >
       <View style={styles.header}>
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             navigation.navigate("Welcome");
           }}
           style={styles.BackButtonBorder}
         >
           <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
+        </TouchableOpacity>
         <Text style={styles.RegisterText}>Register</Text>
       </View>
       <Text style={styles.RegisterSubText}>
@@ -233,11 +234,9 @@ function RegistrationScreen({ navigation }) {
         )}
       </View>
 
-      <View style={styles.Submit}>
-        <Text style={styles.SubmitText} onPress={handleSubmit}>
-          Submit
-        </Text>
-      </View>
+      <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
+        <Text style={styles.SubmitText}>Submit</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 }

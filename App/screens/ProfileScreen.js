@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -62,33 +63,29 @@ function ProfileScreen({ navigation }) {
     >
       <SafeAreaView>
         <View style={styles.header}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate("Map");
             }}
             style={styles.BackButtonBorder}
           >
             <Text style={styles.BackArrow}>⇤</Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.ProfileText}>Profile</Text>
         </View>
         <View style={styles.ProfileOuterCard}>
           <Text style={styles.ProfileCard}>Username</Text>
           <Text style={styles.ProfileCardContent}>{`${username}`}</Text>
         </View>
-        <View style={styles.Edit}>
-          <Text
-            style={styles.EditText}
-            onPress={() => navigation.navigate("Edit Details")}
-          >
-            Edit Details
-          </Text>
-          <View style={styles.signOut}>
-            <Text style={styles.EditText} onPress={handleSignOut}>
-              Sign Out
-            </Text>
-          </View>
-        </View>
+        <TouchableOpacity
+          style={styles.Edit}
+          onPress={() => navigation.navigate("Edit Details")}
+        >
+          <Text style={styles.EditText}>Edit Details</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.Edit} onPress={handleSignOut}>
+          <Text style={styles.EditText}>Sign Out</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
   );

@@ -5,6 +5,7 @@ import {
   View,
   SafeAreaView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { useState, useContext, useCallback } from "react";
 import colors from "../config/colors";
@@ -111,47 +112,33 @@ export default function Map({ navigation }) {
           ></Image>
         </Marker>
         {markers}
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-          style={styles.BackButtonBorder}
-        >
-          <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
         <Text style={styles.MapText}></Text>
       </Mapview>
       <View style={styles.Menu}>
-        <View style={styles.NavButtonBorder}>
-          <Text
-            onPress={() => {
-              navigation.navigate("Profile");
-            }}
-            style={styles.NavButton}
-          >
-            Profile
-          </Text>
-        </View>
-        <View style={styles.NavButtonBorder}>
-          <Text
-            onPress={() => {
-              navigation.navigate("Quest Log");
-            }}
-            style={styles.NavButton}
-          >
-            Quest Log
-          </Text>
-        </View>
-        <View style={styles.NavButtonBorder}>
-          <Text
-            onPress={() => {
-              navigation.navigate("Create Quest");
-            }}
-            style={styles.NavButton}
-          >
-            Create Quest
-          </Text>
-        </View>
+        <TouchableOpacity
+          style={styles.NavButtonBorder}
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+        >
+          <Text style={styles.NavButton}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.NavButtonBorder}
+          onPress={() => {
+            navigation.navigate("Quest Log");
+          }}
+        >
+          <Text style={styles.NavButton}>Quest Log</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.NavButtonBorder}
+          onPress={() => {
+            navigation.navigate("Create Quest");
+          }}
+        >
+          <Text style={styles.NavButton}>Create Quest</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

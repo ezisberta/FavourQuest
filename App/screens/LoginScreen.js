@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -34,7 +35,7 @@ function LoginScreen({ navigation }) {
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         setUser(result.user.uid);
-        navigation.navigate("Profile");
+        navigation.navigate("Map");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -54,14 +55,14 @@ function LoginScreen({ navigation }) {
       style={styles.background}
     >
       <View style={styles.header}>
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             navigation.navigate("Welcome");
           }}
           style={styles.BackButtonBorder}
         >
           <Text style={styles.BackArrow}>⇤</Text>
-        </Pressable>
+        </TouchableOpacity>
         <Text style={styles.LoginText}>Login</Text>
       </View>
 
@@ -83,11 +84,9 @@ function LoginScreen({ navigation }) {
         ></TextInput>
       </View>
 
-      <View style={styles.Submit}>
-        <Text style={styles.SubmitText} onPress={handleSubmit}>
-          Your quest continues...
-        </Text>
-      </View>
+      <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
+        <Text style={styles.SubmitText}>Your quest continues...</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 }

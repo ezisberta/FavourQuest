@@ -6,7 +6,7 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  Pressable,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -113,14 +113,14 @@ export default function Quest({ navigation }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 10 }}>
           <View>
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Map");
               }}
               style={styles.BackButtonBorder}
             >
               <Text style={styles.BackArrow}>⇤</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <Image
             style={styles.scroll}
@@ -134,42 +134,42 @@ export default function Quest({ navigation }) {
           </Text>
           {user === questArr.uid ? (
             <View>
-              <Pressable
+              <TouchableOpacity
                 onPress={() => {
                   completeQuest();
                 }}
                 style={styles.CompleteButtonBorder}
               >
                 <Text style={styles.Complete}>Complete</Text>
-              </Pressable>
-              <Pressable
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => {
                   cancelQuest();
                 }}
                 style={styles.CancelButtonBorder}
               >
                 <Text style={styles.Cancel}>Cancel</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           ) : questArr.questAcceptedBy === user &&
             questArr.questCompleted === false ? (
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 abandonQuest();
               }}
               style={styles.AbandonButtonBorder}
             >
               <Text style={styles.Accept}>Abandon</Text>
-            </Pressable>
+            </TouchableOpacity>
           ) : questArr.questCompleted === false ? (
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 acceptQuest();
               }}
               style={styles.AcceptButtonBorder}
             >
               <Text style={styles.Accept}>Accept</Text>
-            </Pressable>
+            </TouchableOpacity>
           ) : (
             <Text style={styles.QuestComplete}>Quest Complete</Text>
           )}

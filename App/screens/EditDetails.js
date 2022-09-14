@@ -5,7 +5,7 @@ import {
   ImageBackground,
   StyleSheet,
   View,
-  Pressable,
+  TouchableOpacity,
   SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -30,14 +30,14 @@ function EditDetails({ navigation }) {
     >
       <SafeAreaView>
         <View style={styles.header}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate("Profile");
             }}
             style={styles.BackButtonBorder}
           >
             <Text style={styles.BackArrow}>⇤</Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.DetailsText}>Edit Details</Text>
         </View>
         <View style={styles.ProfileOuterCard}>
@@ -55,14 +55,12 @@ function EditDetails({ navigation }) {
         <View style={styles.Edit}>
           <Text style={styles.EditText}>Edit Details</Text>
         </View>
-        <View style={styles.Submit}>
-          <Text
-            style={styles.SubmitText}
-            onPress={() => navigation.navigate("Quest")}
-          >
-            Submit
-          </Text>
-        </View>
+        <TouchableOpacity
+          style={styles.Submit}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Text style={styles.SubmitText}>Submit</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
   );

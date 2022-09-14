@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -16,6 +17,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 function QuestLog({ navigation }) {
   const [myQuests, setMyQuests] = useState([]);
+  const [questType, setQuestType] = useState("Accepted");
   const { user } = useContext(UserContext);
   const { setQuest } = useContext(QuestContext);
 
@@ -82,6 +84,7 @@ function QuestLog({ navigation }) {
             );
           })
         );
+        setQuestType("Accepted");
       })
       .catch((err) => {
         console.log(err);
@@ -110,6 +113,7 @@ function QuestLog({ navigation }) {
             );
           })
         );
+        setQuestType("Created");
       })
       .catch((err) => {
         console.log(err);
@@ -139,6 +143,7 @@ function QuestLog({ navigation }) {
             );
           })
         );
+        setQuestType("Completed");
       })
       .catch((err) => {
         console.log(err);
@@ -153,37 +158,40 @@ function QuestLog({ navigation }) {
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 10 }}>
           <View style={styles.header}>
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Map");
               }}
               style={styles.BackButtonBorder}
             >
               <Text style={styles.BackArrow}>⇤</Text>
-            </Pressable>
+            </TouchableOpacity>
             <Text style={styles.QuestLog}>Quest Log</Text>
           </View>
           <View style={styles.QuestCard}>
-            <Text style={styles.QuestType}>Your Quests:</Text>
+            <Text style={styles.QuestType}>{questType}</Text>
             {myQuests}
           </View>
         </View>
         <View style={styles.Menu}>
-          <View style={styles.NavButtonBorder}>
-            <Text onPress={handleAccepted} style={styles.NavButton}>
-              Accepted
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text onPress={handleCreated} style={styles.NavButton}>
-              Created
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text onPress={handleCompleted} style={styles.NavButton}>
-              Completed
-            </Text>
-          </View>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={handleAccepted}
+          >
+            <Text style={styles.NavButton}>Accepted</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={handleCreated}
+          >
+            <Text style={styles.NavButton}>Created</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={handleCompleted}
+          >
+            <Text style={styles.NavButton}>Completed</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ImageBackground>

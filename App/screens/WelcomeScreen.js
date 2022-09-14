@@ -1,5 +1,11 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { useFonts } from "expo-font";
 import LoadingPage from "./LoadingPage";
 
@@ -21,22 +27,18 @@ function WelcomeScreen({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
     >
       <Text style={styles.welcometext}>FavourQuest</Text>
-      <View style={styles.loginButton}>
-        <Text
-          style={styles.welcomeText}
-          onPress={() => navigation.navigate("Login")}
-        >
-          Login
-        </Text>
-      </View>
-      <View style={styles.registerButton}>
-        <Text
-          onPress={() => navigation.navigate("Registration")}
-          style={styles.welcomeText}
-        >
-          Register
-        </Text>
-      </View>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => navigation.navigate("Login")}
+      >
+        <Text style={styles.welcomeText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.registerButton}
+        onPress={() => navigation.navigate("Registration")}
+      >
+        <Text style={styles.welcomeText}>Register</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 }
