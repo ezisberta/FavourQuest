@@ -7,6 +7,7 @@ import {
   View,
   Pressable,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -140,99 +141,101 @@ function RegistrationScreen({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Welcome");
-          }}
-          style={styles.BackButtonBorder}
-        >
-          <Text style={styles.BackArrow}>⇤</Text>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Welcome");
+            }}
+            style={styles.BackButtonBorder}
+          >
+            <Text style={styles.BackArrow}>⇤</Text>
+          </TouchableOpacity>
+          <Text style={styles.RegisterText}>Register</Text>
+        </View>
+        <Text style={styles.RegisterSubText}>
+          Enter your details below to begin your quest!
+        </Text>
+        <View style={styles.ViewForm}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="First Name"
+            onChangeText={(typedText) => {
+              setFirstname(typedText);
+            }}
+            onBlur={handleBlurFirstName}
+            maxLength={20}
+          ></TextInput>
+          {firstNameValid === "invalid" && (
+            <Text style={styles.invalidWarning}>Invalid first name</Text>
+          )}
+
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Surname"
+            onChangeText={(typedText) => {
+              setSurname(typedText);
+            }}
+            onBlur={handleBlurSurname}
+            maxLength={20}
+          ></TextInput>
+          {surnameValid === "invalid" && (
+            <Text style={styles.invalidWarning}>Invalid surname</Text>
+          )}
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Username"
+            onChangeText={(typedText) => {
+              setUsername(typedText);
+            }}
+            onBlur={handleBlurUsername}
+            maxLength={15}
+          ></TextInput>
+          {usernameValid === "invalidFormat" ? (
+            <Text style={styles.invalidWarning}>Invalid username format</Text>
+          ) : usernameValid === "takenUsername" ? (
+            <Text style={styles.invalidWarning}>Username taken</Text>
+          ) : (
+            <></>
+          )}
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            onChangeText={(typedText) => {
+              setEmail(typedText);
+            }}
+            onBlur={handleBlurEmail}
+            maxLength={50}
+          ></TextInput>
+          {emailValid === "invalidFormat" ? (
+            <Text style={styles.invalidWarning}>Invalid email format</Text>
+          ) : emailValid === "takenEmail" ? (
+            <Text style={styles.invalidWarning}>Email taken</Text>
+          ) : (
+            <></>
+          )}
+
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(typedText) => {
+              setPassword(typedText);
+            }}
+            onBlur={handleBlurPassword}
+            maxLength={20}
+          ></TextInput>
+          {passwordValid === "invalid" && (
+            <Text style={styles.invalidWarning}>
+              Invalid password Password must have between 6 and 20 characters
+            </Text>
+          )}
+        </View>
+
+        <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
+          <Text style={styles.SubmitText}>Submit</Text>
         </TouchableOpacity>
-        <Text style={styles.RegisterText}>Register</Text>
-      </View>
-      <Text style={styles.RegisterSubText}>
-        Enter your details below to begin your quest!
-      </Text>
-      <View style={styles.ViewForm}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="First Name"
-          onChangeText={(typedText) => {
-            setFirstname(typedText);
-          }}
-          onBlur={handleBlurFirstName}
-          maxLength={20}
-        ></TextInput>
-        {firstNameValid === "invalid" && (
-          <Text style={styles.invalidWarning}>Invalid first name</Text>
-        )}
-
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Surname"
-          onChangeText={(typedText) => {
-            setSurname(typedText);
-          }}
-          onBlur={handleBlurSurname}
-          maxLength={20}
-        ></TextInput>
-        {surnameValid === "invalid" && (
-          <Text style={styles.invalidWarning}>Invalid surname</Text>
-        )}
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Username"
-          onChangeText={(typedText) => {
-            setUsername(typedText);
-          }}
-          onBlur={handleBlurUsername}
-          maxLength={15}
-        ></TextInput>
-        {usernameValid === "invalidFormat" ? (
-          <Text style={styles.invalidWarning}>Invalid username format</Text>
-        ) : usernameValid === "takenUsername" ? (
-          <Text style={styles.invalidWarning}>Username taken</Text>
-        ) : (
-          <></>
-        )}
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          onChangeText={(typedText) => {
-            setEmail(typedText);
-          }}
-          onBlur={handleBlurEmail}
-          maxLength={50}
-        ></TextInput>
-        {emailValid === "invalidFormat" ? (
-          <Text style={styles.invalidWarning}>Invalid email format</Text>
-        ) : emailValid === "takenEmail" ? (
-          <Text style={styles.invalidWarning}>Email taken</Text>
-        ) : (
-          <></>
-        )}
-
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(typedText) => {
-            setPassword(typedText);
-          }}
-          onBlur={handleBlurPassword}
-          maxLength={20}
-        ></TextInput>
-        {passwordValid === "invalid" && (
-          <Text style={styles.invalidWarning}>
-            Invalid password Password must have between 6 and 20 characters
-          </Text>
-        )}
-      </View>
-
-      <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
-        <Text style={styles.SubmitText}>Submit</Text>
-      </TouchableOpacity>
+      </SafeAreaView>
     </ImageBackground>
   );
 }

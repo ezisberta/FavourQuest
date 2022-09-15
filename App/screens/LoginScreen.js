@@ -7,6 +7,7 @@ import {
   View,
   Pressable,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
 import colors from "../config/colors";
@@ -54,39 +55,41 @@ function LoginScreen({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
       style={styles.background}
     >
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Welcome");
-          }}
-          style={styles.BackButtonBorder}
-        >
-          <Text style={styles.BackArrow}>⇤</Text>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Welcome");
+            }}
+            style={styles.BackButtonBorder}
+          >
+            <Text style={styles.BackArrow}>⇤</Text>
+          </TouchableOpacity>
+          <Text style={styles.LoginText}>Login</Text>
+        </View>
+
+        <View style={styles.ViewForm}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            onChangeText={(typedText) => {
+              setEmail(typedText);
+            }}
+          ></TextInput>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(typedText) => {
+              setPassword(typedText);
+            }}
+          ></TextInput>
+        </View>
+
+        <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
+          <Text style={styles.SubmitText}>Your quest continues...</Text>
         </TouchableOpacity>
-        <Text style={styles.LoginText}>Login</Text>
-      </View>
-
-      <View style={styles.ViewForm}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          onChangeText={(typedText) => {
-            setEmail(typedText);
-          }}
-        ></TextInput>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(typedText) => {
-            setPassword(typedText);
-          }}
-        ></TextInput>
-      </View>
-
-      <TouchableOpacity style={styles.Submit} onPress={handleSubmit}>
-        <Text style={styles.SubmitText}>Your quest continues...</Text>
-      </TouchableOpacity>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
