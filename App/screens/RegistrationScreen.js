@@ -117,23 +117,19 @@ function RegistrationScreen({ navigation }) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((result) => {
-          setUser(result.user.uid);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          const uid = user.uid;
-          db.collection("users").doc(uid).set({
+          console.log(result.user.uid);
+          db.collection("users").doc(result.user.uid).set({
             username,
             email,
             firstname,
             surname,
           });
-        }
-      });
-      navigation.navigate("Profile");
+          setUser(result.user.uid);
+          navigation.navigate("Profile");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("All fields must be correct before proceding");
     }

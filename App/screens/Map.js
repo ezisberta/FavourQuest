@@ -188,18 +188,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   NavButton: {
-    marginTop: 10,
-    marginLeft: 10,
     fontSize: 13,
     fontFamily: "Minecraft-Regular",
+    textAlign: "center",
   },
   NavButtonBorder: {
+    justifyContent: "center",
     backgroundColor: colors.secondary,
-    margin: 25,
+    marginTop: 27,
     width: 100,
     height: 40,
     bottom: 10,
     borderRadius: "5%",
-    shadowOpacity: "5%",
+    shadowOpacity: 0.5,
   },
 });

@@ -156,7 +156,7 @@ function QuestLog({ navigation }) {
       style={styles.background}
     >
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 10 }}>
+        <View style={{ flex: 8 }}>
           <View style={styles.header}>
             <TouchableOpacity
               onPress={() => {
@@ -169,7 +169,10 @@ function QuestLog({ navigation }) {
             <Text style={styles.QuestLog}>Quest Log</Text>
           </View>
           <View style={styles.QuestCard}>
-            <Text style={styles.QuestType}>{questType}</Text>
+            <View style={styles.TypeContainer}>
+              <Text style={styles.QuestType}>{questType}</Text>
+            </View>
+
             {myQuests}
           </View>
         </View>
@@ -203,8 +206,6 @@ const styles = StyleSheet.create({
   },
   Menu: {
     flex: 1,
-    marginTop: "160%",
-    position: "absolute",
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: "100%",
@@ -212,19 +213,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   NavButtonBorder: {
+    justifyContent: "center",
     backgroundColor: colors.secondary,
-    margin: 25,
-    width: 95,
+    marginTop: 27,
+    width: 100,
     height: 40,
     bottom: 10,
     borderRadius: "5%",
-    shadowOpacity: "5%",
+    shadowOpacity: 0.5,
   },
   NavButton: {
-    marginTop: 10,
-    marginLeft: 10,
-    fontSize: 15,
+    fontSize: 13,
     fontFamily: "Minecraft-Regular",
+    textAlign: "center",
   },
   ProfileCardContent: {
     fontSize: "20",
@@ -239,8 +240,10 @@ const styles = StyleSheet.create({
     height: "65%",
     backgroundColor: colors.secondary,
   },
+
+  TypeContainer: { justifyContent: "center", alignContent: "center" },
   QuestType: {
-    marginLeft: "25%",
+    marginLeft: 101,
     fontSize: "20",
     marginTop: 10,
     fontFamily: "Minecraft-Bold",

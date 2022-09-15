@@ -6,7 +6,6 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  Pressable,
   TextInput,
   View,
   TouchableOpacity,
@@ -71,7 +70,7 @@ export default function QuestInput({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
     >
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 10 }}>
+        <View style={{ flex: 8 }}>
           <View>
             <TouchableOpacity
               onPress={() => {
@@ -146,36 +145,22 @@ export default function QuestInput({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.Menu}>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Profile");
-              }}
-              style={styles.NavButton}
-            >
-              Profile
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Quest Log");
-              }}
-              style={styles.NavButton}
-            >
-              Quest Log
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Create Quest");
-              }}
-              style={styles.NavButton}
-            >
-              Create Quest
-            </Text>
-          </View>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+          >
+            <Text style={styles.NavButton}>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={() => {
+              navigation.navigate("Quest Log");
+            }}
+          >
+            <Text style={styles.NavButton}>Quest Log</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ImageBackground>
@@ -299,18 +284,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   NavButton: {
-    marginTop: 10,
-    marginLeft: 10,
     fontSize: 13,
     fontFamily: "Minecraft-Regular",
+    textAlign: "center",
   },
   NavButtonBorder: {
+    justifyContent: "center",
     backgroundColor: colors.secondary,
-    margin: 25,
+    marginTop: 27,
     width: 100,
     height: 40,
     bottom: 10,
     borderRadius: "5%",
-    shadowOpacity: "5%",
+    shadowOpacity: 0.5,
   },
 });

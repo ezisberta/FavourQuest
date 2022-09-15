@@ -111,7 +111,7 @@ export default function Quest({ navigation }) {
       source={require("../assets/images/Pixel1.png")}
     >
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 10 }}>
+        <View style={{ flex: 8 }}>
           <View>
             <TouchableOpacity
               onPress={() => {
@@ -175,36 +175,30 @@ export default function Quest({ navigation }) {
           )}
         </View>
         <View style={styles.Menu}>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Profile");
-              }}
-              style={styles.NavButton}
-            >
-              Profile
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Quest Log");
-              }}
-              style={styles.NavButton}
-            >
-              Quest Log
-            </Text>
-          </View>
-          <View style={styles.NavButtonBorder}>
-            <Text
-              onPress={() => {
-                navigation.navigate("Create Quest");
-              }}
-              style={styles.NavButton}
-            >
-              Create Quest
-            </Text>
-          </View>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
+          >
+            <Text style={styles.NavButton}>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={() => {
+              navigation.navigate("Quest Log");
+            }}
+          >
+            <Text style={styles.NavButton}>Quest Log</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.NavButtonBorder}
+            onPress={() => {
+              navigation.navigate("Create Quest");
+            }}
+          >
+            <Text style={styles.NavButton}>Create Quest</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ImageBackground>
@@ -322,6 +316,7 @@ const styles = StyleSheet.create({
   AcceptButtonBorder: {
     backgroundColor: colors.secondary,
     margin: 25,
+    marginBottom: 50,
     width: 80,
     height: 40,
     left: "28%",
@@ -333,6 +328,7 @@ const styles = StyleSheet.create({
   AbandonButtonBorder: {
     backgroundColor: colors.secondary,
     margin: 25,
+    marginBottom: 50,
     width: 95,
     height: 40,
     left: "26%",
@@ -394,18 +390,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   NavButton: {
-    marginTop: 10,
-    marginLeft: 10,
     fontSize: 13,
     fontFamily: "Minecraft-Regular",
+    textAlign: "center",
   },
   NavButtonBorder: {
+    justifyContent: "center",
     backgroundColor: colors.secondary,
-    margin: 25,
+    marginTop: 27,
     width: 100,
     height: 40,
     bottom: 10,
     borderRadius: "5%",
-    shadowOpacity: "5%",
+    shadowOpacity: 0.5,
   },
 });
