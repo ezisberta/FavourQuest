@@ -125,7 +125,7 @@ function RegistrationScreen({ navigation }) {
             surname,
           });
           setUser(result.user.uid);
-          navigation.navigate("Profile");
+          navigation.navigate("Map");
         })
         .catch((err) => {
           console.log(err);
