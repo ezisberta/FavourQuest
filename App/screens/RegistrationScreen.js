@@ -118,7 +118,6 @@ function RegistrationScreen({ navigation }) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((result) => {
-          console.log(result.user.uid);
           db.collection("users").doc(result.user.uid).set({
             username,
             email,
